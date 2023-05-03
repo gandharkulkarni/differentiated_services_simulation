@@ -187,18 +187,53 @@ main (int argc, char *argv[])
   NS_LOG_INFO ("Assign IP Addresses.");
   Ipv4AddressHelper ipv4;
   ipv4.SetBase ("10.1.1.0", "255.255.255.0");
-  Ipv4InterfaceContainer i0i1 = ipv4.Assign (device_0_1);
+  Ipv4InterfaceContainer interface_0_1 = ipv4.Assign (device_0_1);
 
   ipv4.SetBase ("10.1.2.0", "255.255.255.0");
-  Ipv4InterfaceContainer i1i2 = ipv4.Assign (device_1_2);
+  Ipv4InterfaceContainer interface_1_2 = ipv4.Assign (device_1_2);
 
   // Create router nodes, initialize routing database and set up the routing tables in the nodes.
   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
 
   NS_LOG_INFO ("Create Applications.");
   if (config_file == "SPQ") {
+    
   }
   else { 
    }
 
+  UdpServerHelper server_app1(9);
+
+  ApplicationContainer serverApps = server_app1.Install (node_container.Get (2));
+  serverApps.Start (Seconds (1.0));
+  serverApps.Stop (Seconds (10000.0));
+
+  UdpServerHelper server_app2 (10);
+  ApplicationContainer serverApps2 = server_app2.Install (node_container.Get (2));
+  serverApps2.Start (Seconds (1.0));
+  serverApps2.Stop (Seconds (10000.0));
+
+  UdpClientHelper echoClient (interface_1_2.GetAddress (1), 9);
+  echoClient.SetAttribute ("MaxPackets", UintegerValue (1000));
+  echoClient.SetAttribute ("Interval", TimeValue (Seconds (0.001)));
+  echoClient.SetAttribute ("PacketSize", UintegerValue (1000));
+
+  ApplicationContainer client_app1 = echoClient.Install (node_container.Get (0));
+  client_app1.Start (Seconds (3.000));
+  client_app1.Stop (Seconds (10000.0));
+
+  UdpClientHelper client_app2 (interface_1_2.GetAddress (1), 10);
+  client_app2.SetAttribute ("MaxPackets", UintegerValue (1000));
+  client_app2.SetAttribute ("Interval", TimeValue (Seconds (0.001)));
+  client_app2.SetAttribute ("PacketSize", UintegerValue (1000));
+
+  ApplicationContainer client2 = client_app2.Install (node_container.Get (0));
+  client2.Start (Seconds (3.101)); 
+  client2.Stop (Seconds (10000.0));
+
+  Simulator::Run ();
+  Simulator::Destroy ();
+  return 0;
+
 }
+

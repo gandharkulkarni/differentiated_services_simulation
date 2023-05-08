@@ -1,148 +1,185 @@
-#include "ns3/log.h"
 #include "traffic-class.h"
+#include "filter.h"
+#include "destination-ip-address.h"
+#include "ns3/log.h"
+#include "ns3/packet.h"
+#include <iostream>
 
-namespace ns3 {
+using namespace ns3;
 
-NS_LOG_COMPONENT_DEFINE ("TrafficClass");
-NS_OBJECT_ENSURE_REGISTERED (TrafficClass);
+NS_LOG_COMPONENT_DEFINE("TrafficClass");
 
 TypeId
-TrafficClass::GetTypeId (void)
+TrafficClass::GetTypeId(void)
 {
-  static TypeId tid =
-      TypeId ("ns3::TrafficClass")
-        .SetParent<Object> ()
-        .SetGroupName ("TrafficControl");
-  return tid;
+    static TypeId tid = TypeId("ns3::TrafficClass").SetParent<Object>().SetGroupName("Network QoS");
+    return tid;
 }
 
-TrafficClass::TrafficClass ()
+TrafficClass::TrafficClass(uint32_t maxPackets,
+                           uint32_t priority_level,
+                           bool isDefault,
+                           Ipv4Address destIpAddr,
+                           Ipv4Mask destMask,
+                           uint32_t destPortNum,
+                           uint32_t protNum,
+                           Ipv4Address sourIpAddr,
+                           Ipv4Mask sourMask,
+                           uint32_t sourPortNum)
 {
-  NS_LOG_FUNCTION (this);
+    this->maxPackets = maxPackets;
+    this->priority_level = priority_level;
+    this->isDefault = isDefault;
+    // this->filters = filters;
+    DestinationIpAddress* dest_ip_addr = new DestinationIpAddress(destIpAddr);
+    DestinationMask* dest_mask = new DestinationMask(destMask);
+    DestinationPortNumber* dest_port_number = new DestinationPortNumber(destPortNum);
+    ProtocolNumber* porto_number = new ProtocolNumber(protNum);
+    SourceIpAddress* sour_ip_addr = new SourceIpAddress(sourIpAddr);
+    SourceMask* sour_mask = new SourceMask(sourMask);
+    SourcePortNumber* sour_port_number = new SourcePortNumber(sourPortNum);
+    Filter* filter =
+        new Filter(dest_ip_addr, dest_mask, dest_port_number, porto_number, sour_ip_addr, sour_mask, sour_port_number);
+    std::vector<Filter*> filters;
+    filters.push_back(filter);
+    this->filters = filters;
+
+    NS_LOG_FUNCTION(this);
 }
 
-TrafficClass::TrafficClass (uint32_t maxPackets, uint32_t maxBytes, double_t weight, uint32_t priority_level, bool isDefault, std::vector<Filter *> filters)
+TrafficClass::~TrafficClass()
 {
-  this->maxPackets = maxPackets;
-  this->maxBytes = maxBytes;
-  this->weight = weight;
-  this->priority_level = priority_level;
-  this->isDefault = isDefault;
-  this->filters = filters;
-  NS_LOG_FUNCTION (this);
+    NS_LOG_FUNCTION(this);
 }
 
-TrafficClass::~TrafficClass ()
+void
+TrafficClass::SetPackets(uint32_t p) // todo
 {
-  NS_LOG_FUNCTION (this);
+    packets = p;
 }
 
-//for each filter in vector of filter call match on each filter
-// even if one match -- return true
+uint32_t
+TrafficClass::GePackets() // todo
+{
+    return m_queue.size();
+}
+
+void
+TrafficClass::SetMaxPackets(uint32_t mp)
+{
+    maxPackets = mp;
+}
+
+uint32_t
+TrafficClass::GetMaxPackets()
+{
+    return maxPackets;
+}
+
+void
+TrafficClass::SetPriorityLevel(double_t p)
+{
+    priority_level = p;
+}
+
+uint32_t
+TrafficClass::GetPriorityLevel()
+{
+    return priority_level;
+}
+
+void
+TrafficClass::SetDefault(bool d)
+{
+    isDefault = d;
+}
+
 bool
-TrafficClass::match (Ptr<Packet> packet)
+TrafficClass::GetDefault()
 {
-  NS_LOG_FUNCTION (this << packet);
+    return isDefault;
+}
 
-  for (Filter *filter : filters)
+std::queue<Ptr<Packet>>* 
+TrafficClass:: getMqueue()
+{
+    return &m_queue;
+}
+
+bool
+TrafficClass::Enqueue(Ptr<Packet> p)
+{
+    if (match(p) && m_queue.size() < maxPackets)
     {
-      if (filter->match (packet))
+        m_queue.push(p);
+        packets++; // todo
+        return true;
+    }
+    return false;
+}
+
+Ptr<Packet>
+TrafficClass::Dequeue()
+{
+    NS_LOG_FUNCTION(this);
+    if (m_queue.empty())
+    {
+        NS_LOG_LOGIC("Queue empty");
+        return nullptr;
+    }
+    Ptr<Packet> res = m_queue.front();
+    m_queue.pop();
+    packets--; // todo
+    return res;
+}
+
+bool
+TrafficClass::match(Ptr<Packet> packet)
+{
+    NS_LOG_FUNCTION(this << packet);
+
+    for (Filter* filter : filters)
+    {
+        if (filter->match(packet))
         {
-          return true;
+            return true;
         }
     }
-  return false;
+    return false;
 }
 
 bool
-TrafficClass::IsEmpty ()
+TrafficClass::IsEmpty()
 {
-  return m_queue.empty ();
+    NS_LOG_FUNCTION(this);
+    return m_queue.empty();
 }
 
-
-/***
- * To Enqueue the packet
- * */
-bool
-TrafficClass::Enqueue (Ptr<Packet> packet)
+Ptr<Packet>
+TrafficClass::Remove()
 {
-  //std::cout<<"Test.TrafficClass.Enqueue.m_queue.size:"<<m_queue.size()<<std::endl;
-  
-  bytes+=packet->GetSize();
-  m_queue.push (packet);
-  //std::cout<<"Test.TrafficClass.Enqueue.packet:"<<packet<<std::endl;
-  std::cout<<"Test.TrafficClass.Enqueue.m_queue.size.AFTER.PUSH:"<<m_queue.size()<<std::endl;  
+    NS_LOG_FUNCTION(this);
 
-  return true;
-}
-
-/***
- * To Dequeue the packet
- * */
-Ptr<ns3::Packet>
-TrafficClass::Dequeue ()
-{
-  // Ptr<Packet> p = m_queue.front();
-  // if(!m_queue.empty){
-  //   m_queue.pop();
-  // }
-  // if(p){
-  //   return p;
-  // }
-  // return 0;
-  NS_LOG_FUNCTION (this);
-
-  if (m_queue.empty ())
+    if (!m_queue.empty())
     {
-      NS_LOG_LOGIC ("Queue empty");
-      std::cout<<"Queue empty" <<std::endl;
-      return 0;
+        Ptr<Packet> packet = m_queue.front();
+        m_queue.pop();
+        return packet;
+    }
+    return nullptr;
+}
+
+Ptr<Packet>
+TrafficClass::Peek()
+{
+    NS_LOG_FUNCTION(this);
+
+    if (m_queue.empty())
+    {
+        NS_LOG_LOGIC("Queue empty");
+        return nullptr;
     }
 
-  Ptr<Packet> p = m_queue.front ();
-  m_queue.pop ();
-  bytes -= p-> GetSize ();
-  NS_LOG_LOGIC ("Popped " << p);
-  std::cout<< "Queue Size " << m_queue.size () << ",priority:"<< priority_level;
-  NS_LOG_LOGIC ("Number bytes " << bytes);
-
-  return p;
+    Ptr<Packet> p = m_queue.front();
+    return p;
 }
-
-/***
- * To Remove the packet
- * */
-Ptr<ns3::Packet>
-TrafficClass::Remove ()
-{
-    if(!m_queue.empty()){
-       m_queue.pop();
-  }
-  return 0;
-}
-
-/***
- * To Peek the packet
- * */
-Ptr<ns3::Packet>
-TrafficClass::Peek ()
-{
-  NS_LOG_FUNCTION (this);
-
-  if (m_queue.empty ())
-    {
-      NS_LOG_LOGIC ("Queue empty");
-      std::cout<<"Queue empty" <<std::endl;
-    
-      return 0;
-    }
-
-  Ptr<Packet> p = m_queue.front ();
-  packets = m_queue.size ();
-  bytes = bytes;
-
-  return p;
-}
-
-} // namespace ns3

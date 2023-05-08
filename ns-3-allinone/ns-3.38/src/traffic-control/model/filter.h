@@ -4,11 +4,14 @@
 #include "filter-element.h"
 
 #include "ns3/log.h"
-
-// #include "ns3/integer.h"
-// #include "ns3/ppp-header.h"
-// #include "ns3/pointer.h"
-// #include "queue-disc.h"
+#include "filter-element.h"
+#include "destination-ip-address.h"
+#include "destination-mask.h"
+#include "destination-port-number.h"
+#include "protocol-number.h"
+#include "source-ip-address.h"
+#include "source-mask.h"
+#include "source-port-number.h"
 
 namespace ns3
 {
@@ -17,6 +20,8 @@ class Filter : public Object
 {
   public:
     Filter();
+    Filter(DestinationIpAddress* destIpAddr, DestinationMask* destMask, DestinationPortNumber* destPortNum, 
+         ProtocolNumber* protNum, SourceIpAddress* sourIpAddr, SourceMask* sourMask, SourcePortNumber* sourPortNum);
     ~Filter();
 
     // static TypeId GetTypeId (void);

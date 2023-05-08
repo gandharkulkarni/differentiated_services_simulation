@@ -1,57 +1,33 @@
 #ifndef SPQ_H
 #define SPQ_H
 
+#include "traffic-class.h"
 #include "diff-serv.h"
-#include "ns3/queue.h"
-#include "ns3/log.h"
-
-namespace ns3 {
+using namespace ns3;
 
 template <typename Packet>
-class SPQ : public DiffServ<Packet> 
+class SPQ : public DiffServ<Packet>
 {
+    public:
+        SPQ();
+        ~SPQ();
 
-public:
-  SPQ ();
+        static TypeId GetTypeId(void);
+    
+        bool Enqueue(Ptr<Packet> item) override;
+        Ptr<Packet> Dequeue() override;
+        Ptr<Packet> Remove() override;
+        Ptr<const Packet> Peek(void) const override;
+        uint32_t Classify(Ptr<Packet> p);
+        TrafficClass* Schedule();
 
-  SPQ (QueueMode mode, std::vector<TrafficClass *> trafficClassVector);
-
-  static TypeId GetTypeId (void);
-
-  virtual ~SPQ ();
-
-  bool Enqueue (Ptr<Packet> item);
-
-  Ptr<Packet> Dequeue ();
-
-  Ptr<Packet> Remove ();
-
-  Ptr<const Packet> Peek (void) const;
-
-  u_int32_t Classify (Ptr<Packet> item);
-
-  Ptr<Packet> Schedule ();
-
-  bool AddTrafficClass (TrafficClass* trafficClass);
-
-  QueueMode m_mode; 
-  std::vector<TrafficClass*> q_class; 
-
-private:
-
-   using DiffServ<Packet>::Enqueue;
-   using DiffServ<Packet>::Dequeue;
-   using DiffServ<Packet>::Remove;
-   using DiffServ<Packet>::Peek;
-
-   using DiffServ<Packet>::Schedule;
-   using DiffServ<Packet>::Classify;
-
-  NS_LOG_TEMPLATE_DECLARE;
+    protected:
+        std::vector<TrafficClass*> q_class;
+        bool DoEnqueue(Ptr<Packet> p);
+        Ptr<Packet> DoDequeue();
+        Ptr<const Packet> DoPeek() const;
+        Ptr<Packet> DoRemove();
 };
 
 
-extern template class SPQ<Packet>;
-} // namespace ns3
-
-#endif /* SPQ_H */
+#endif // SPQ_H

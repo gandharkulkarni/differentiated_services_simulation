@@ -1,4 +1,33 @@
+#Ignore everything in ns3-allinone
 /ns-3-allinone/*
-
-!/ns-3-allinone/ns-3.38/scratch/*
-!/ns-3-allinone/ns-3.38/src/traffic-control/model/*
+#but not ns-3.38
+!/ns-3-allinone/ns-3.38
+#ignore everything in ns-3.38
+/ns-3-allinone/ns-3.38/*
+#but not scrach
+!/ns-3-allinone/ns-3.38/scratch
+#and src
+!/ns-3-allinone/ns-3.38/src
+#ignore everything in src
+/ns-3-allinone/ns-3.38/src/*
+#but not traffic control
+!/ns-3-allinone/ns-3.38/src/traffic-control
+#ignore everything in traffic control
+/ns-3-allinone/ns-3.38/src/traffic-control/*
+#but not model
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/
+!/ns-3-allinone/ns-3.38/src/traffic-control/CMake*
+#ignore everything inside model
+/ns-3-allinone/ns-3.38/src/traffic-control/model/*
+#but not specified files
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/destination-ip-address*
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/source-ip-address*
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/destination-mask*
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/source-mask*
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/destination-port-number*
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/source-port-number*
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/diff-serv*
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/filter*
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/destination-ip-address*
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/spq*
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/traffic-class*

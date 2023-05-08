@@ -32,3 +32,4 @@
 !/ns-3-allinone/ns-3.38/src/traffic-control/model/spq*
 !/ns-3-allinone/ns-3.38/src/traffic-control/model/traffic-class*
 !/ns-3-allinone/ns-3.38/src/traffic-control/model/traffic-generator*
+!/ns-3-allinone/ns-3.38/src/traffic-control/model/protocol-number*

@@ -29,6 +29,7 @@ build_lib(
     model/protocol-number.cc
     model/spq.cc
     model/traffic-class.cc
+    model/traffic-generator.cc
   HEADER_FILES
     helper/queue-disc-container.h
     helper/traffic-control-helper.h
@@ -59,6 +60,7 @@ build_lib(
     model/spq.h
     model/traffic-class.h
     model/filter-element.h
+    model/traffic-generator.h
   LIBRARIES_TO_LINK ${libnetwork}
                     ${libcore}
   TEST_SOURCES

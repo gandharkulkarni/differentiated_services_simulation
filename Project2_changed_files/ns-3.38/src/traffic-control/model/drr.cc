@@ -67,7 +67,9 @@ DRR<Packet>::Dequeue()
     NS_LOG_FUNCTION(this);
 
     Ptr<Packet> packet = DoDequeue();
-
+    if(packet==nullptr){
+        return nullptr;
+    }
     NS_LOG_LOGIC("Popped " << packet);
 
     return packet;
@@ -91,9 +93,7 @@ Ptr<const Packet>
 DRR<Packet>::Peek() const
 {
     NS_LOG_FUNCTION(this);
-
-    // return DiffServ<Packet>::Peek();
-    return nullptr;
+    return DiffServ<Packet>::Peek();
 }
 
 template <typename Packet>
@@ -157,9 +157,8 @@ DRR<Packet>::DoRemove()
 //                 uint32_t sizeOfPacket = packet->GetSize();
 //                 if (q_class[i]->GetDeficitCounter() >= sizeOfPacket)
 //                 {
-//                     q_class[i]->SetDeficitCounter(q_class[i]->GetDeficitCounter() - sizeOfPacket);
-//                     q_class[i]->Dequeue();
-//                     GetServiceQueue()->push(packet);
+//                     q_class[i]->SetDeficitCounter(q_class[i]->GetDeficitCounter() -
+//                     sizeOfPacket); q_class[i]->Dequeue(); GetServiceQueue()->push(packet);
 //                 }
 //             }
 //         }
@@ -196,15 +195,17 @@ DRR<Packet>::Schedule()
 {
     if (GetServiceQueue()->empty())
     {
-        for (uint32_t i = 0; i < q_class.size(); i++) // todo: read '3' from config file
+        for (uint32_t i = 0; i < q_class.size(); i++)
         {
             if (q_class[i]->GetPacketCount() != 0)
             {
-                q_class[i]->SetDeficitCounter(q_class[i]->GetDeficitCounter() + q_class[i]->GetQuantumSize());
+                
+                q_class[i]->SetDeficitCounter(q_class[i]->GetDeficitCounter() +
+                                              q_class[i]->GetQuantumSize());
                 Ptr<Packet> packet = q_class[i]->Peek();
                 uint32_t sizeOfPacket = packet->GetSize();
                 if (q_class[i]->GetDeficitCounter() >= sizeOfPacket)
-                {
+                { 
                     q_class[i]->SetDeficitCounter(q_class[i]->GetDeficitCounter() - sizeOfPacket);
                     q_class[i]->Dequeue();
                     GetServiceQueue()->push(packet);

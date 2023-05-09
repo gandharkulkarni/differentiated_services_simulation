@@ -18,7 +18,6 @@
 #include "ns3/source-mask.h"
 #include "ns3/source-port-number.h"
 #include "ns3/spq.h"
-#include "../src/traffic-control/model/drr.cc"
 #include <vector>
 
 using namespace ns3;

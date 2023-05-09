@@ -32,6 +32,16 @@ TrafficClass::TrafficClass (uint32_t maxPackets, uint32_t maxBytes, double_t wei
   NS_LOG_FUNCTION (this);
 }
 
+TrafficClass::TrafficClass (uint32_t maxPackets,  uint32_t quantum_size, uint32_t deficit_counter, bool isDefault, std::vector<Filter *> filters)
+{
+  this->maxPackets = maxPackets;
+  this->quantum_size = quantum_size;
+  this->deficit_counter = deficit_counter;
+  this->isDefault = isDefault;
+  this->filters = filters;
+  NS_LOG_FUNCTION (this);
+}
+
 TrafficClass::~TrafficClass ()
 {
   NS_LOG_FUNCTION (this);
@@ -68,7 +78,6 @@ bool
 TrafficClass::Enqueue (Ptr<Packet> packet)
 {
   //std::cout<<"Test.TrafficClass.Enqueue.m_queue.size:"<<m_queue.size()<<std::endl;
-  
   bytes+=packet->GetSize();
   m_queue.push (packet);
   //std::cout<<"Test.TrafficClass.Enqueue.packet:"<<packet<<std::endl;
@@ -144,5 +153,41 @@ TrafficClass::Peek ()
 
   return p;
 }
+
+void
+TrafficClass::SetQuantumSize(uint32_t q)
+{
+    quantum_size = q;
+}
+
+uint32_t
+TrafficClass::GetQuantumSize()
+{
+    return quantum_size;
+}
+
+void
+TrafficClass::SetDeficitCounter(uint32_t d)
+{
+    deficit_counter = d;
+}
+
+uint32_t
+TrafficClass::GetDeficitCounter()
+{
+    return deficit_counter;
+}
+
+uint32_t
+TrafficClass::GetMaxPacket(){
+  return maxPackets;
+}
+
+uint32_t
+TrafficClass::GetPacketCount()
+{
+    return m_queue.size();
+}
+
 
 } // namespace ns3

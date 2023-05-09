@@ -1,5 +1,33 @@
 {
-    "QueueCount" : 3,
-    "QueueQuantum" : [100,200,300]
+    "q1":{
+        "max_packets":"50000",
+        "max_bytes":"0",
+        "quantum_size":"1200",
+        "deficit_counter":"0",
+        "is_default":"0",
+        "filters":{
+            "source_port":"49154",
+            "destination_port":"10"
+        }
+    },
+    "q2":{
+        "max_packets":"75000",
+        "max_bytes":"0",
+        "quantum_size":"800",
+        "deficit_counter":"0",
+        "is_default":"0",
+        "filters":{
+        }
+    },
+    "q3":{
+        "max_packets":"100000",
+        "max_bytes":"0",
+        "quantum_size":"400",
+        "deficit_counter":"0",
+        "is_default":"1",
+        "filters":{
+        }
+    }
+
 
 }

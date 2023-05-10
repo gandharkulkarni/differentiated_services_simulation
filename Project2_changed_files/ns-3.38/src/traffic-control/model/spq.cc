@@ -51,7 +51,9 @@ SPQ<Packet>::Enqueue (Ptr<Packet> p)
 
   printf ("Test.SPQ.Enqueue\n");
   u_int32_t index = Classify (p);
+
   q_class[index]->Enqueue (p);
+
   DiffServ<Packet>::Enqueue(p);
 
   return true;
@@ -108,7 +110,6 @@ uint32_t
 SPQ<Packet>::Classify (Ptr<Packet> p)
 {
   NS_LOG_FUNCTION (this << p);
-  std::cout << "Test.SPQ.Classify!" << std::endl;
 
   uint32_t index = -1;
 
@@ -120,7 +121,7 @@ SPQ<Packet>::Classify (Ptr<Packet> p)
         }
       else
         {
-          if (q_class[i]->isDefault)
+          if (q_class[i]->GetDefault())
             { 
               index = i; 
             }
@@ -144,47 +145,17 @@ SPQ<Packet>::Schedule ()
   Ptr<Packet> p;
   for (uint32_t priority = 0; priority < 100; priority++)
     {
-      //std::cout<<"SPQ.q_class.size():"<<  q_class.size()<<std::endl;
       for (uint32_t i = 0; i < q_class.size (); i++)
         {
-          // std::cout<<"SPQ.priority_level:"<<  priority <<std::endl;
-          // std::cout<<"SPQ.q_class[i]->m_queue.size():"<<  q_class[i]->m_queue.size() <<std::endl;
-          if (q_class[i]->priority_level == priority &&
-              q_class[i]->IsEmpty () != true) //HIGH PRIORITY
+          if (q_class[i]->GetPriorityLevel() == priority &&
+              q_class[i]->IsEmpty () != true)
             {
-              std::cout << "SPQ.priority_level is SAME!QUEUE is NOT EMPTY!priority:" << priority
-                        << std::endl;
               p = q_class[i]->Dequeue ();
               return p;
             }
         }
     }
     return 0;
-  // uint32_t high = 0;
-  // uint32_t low = 1;
-  // if(!q_class[high]->IsEmpty()){
-  //   std::cout << "Dequeue high priority packet";
-  //   return q_class[high]->Dequeue();
-  // }
-  // else{
-  //   std::cout << "Dequeue low priority packet";
-  //   return q_class[low]->Dequeue();
-  // }
-    
-}
-
-/**
- * To Add to Traffic Class
- * */
-template <typename Packet>
-bool
-SPQ<Packet>::AddTrafficClass (TrafficClass *trafficClass)
-{
-  std::vector<TrafficClass *> trafficClassList;
-  trafficClassList.push_back (trafficClass);
-  this->q_class = trafficClassList;
-  NS_LOG_FUNCTION (this);
-  return true;
 }
 
 } // namespace ns3

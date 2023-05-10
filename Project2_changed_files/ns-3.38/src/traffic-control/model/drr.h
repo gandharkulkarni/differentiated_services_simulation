@@ -40,7 +40,7 @@ class DRR : public DiffServ<Packet>
 
     using DiffServ<Packet>::Schedule;
     using DiffServ<Packet>::Classify;
-
+    std::vector<uint32_t> active_list;
     std::queue<Ptr<Packet>> service_queue;
 
     NS_LOG_TEMPLATE_DECLARE;

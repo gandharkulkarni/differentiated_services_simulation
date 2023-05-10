@@ -20,7 +20,7 @@ public:
   ProtocolNumber(uint32_t val);  
   ~ProtocolNumber ();  
 
-  bool match (Ptr<ns3::Packet> packet);
+  bool match (Ptr<ns3::Packet> packet) override;
 
 
 private:

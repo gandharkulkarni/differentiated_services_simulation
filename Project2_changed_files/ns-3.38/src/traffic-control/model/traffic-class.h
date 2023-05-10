@@ -42,27 +42,28 @@ class TrafficClass : public Object
     bool IsEmpty();
     Ptr<ns3::Packet> Remove();
     Ptr<ns3::Packet> Peek();
-    uint32_t priority_level;
-
-    bool isDefault; // only one traffic class should have isDefault value=1
-    // std::queue<Ptr<Packet>> m_queue;
+    
+    //Getter and Setter
     void SetQuantumSize(uint32_t q);
     uint32_t GetQuantumSize();
     void SetDeficitCounter(uint32_t d);
     uint32_t GetDeficitCounter();
     uint32_t GetMaxPacket();
     uint32_t GetPacketCount();
+    uint32_t GetPriorityLevel();
+    bool GetDefault();
 
   private:
     uint32_t bytes;
-    uint32_t packets;    // related SPQ
-    uint32_t maxPackets; // related SPQ
-    uint32_t maxBytes;   // related DDR
-    double_t weight;     // related DDR
-    uint32_t prioritylevel;
+    uint32_t packets;
+    uint32_t max_packets; 
+    uint32_t max_bytes;   
+    double_t weight;     //Todo : Remove, 
+    uint32_t priority_level;
     std::queue<Ptr<Packet>> m_queue;
     uint32_t quantum_size;
     uint32_t deficit_counter;
+    bool is_default; // only one traffic class should have isDefault value=1
 };
 
 } // namespace ns3

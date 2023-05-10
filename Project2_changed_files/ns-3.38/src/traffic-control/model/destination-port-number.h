@@ -18,7 +18,7 @@ namespace ns3 {
         ~DestinationPortNumber ();
 
 
-        bool match(Ptr<ns3::Packet> packet);
+        bool match(Ptr<ns3::Packet> packet) override;
 
 
     private:

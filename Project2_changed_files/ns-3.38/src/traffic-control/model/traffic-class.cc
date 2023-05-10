@@ -1,157 +1,155 @@
-#include "ns3/log.h"
 #include "traffic-class.h"
 
-namespace ns3 {
+#include "ns3/log.h"
 
-NS_LOG_COMPONENT_DEFINE ("TrafficClass");
-NS_OBJECT_ENSURE_REGISTERED (TrafficClass);
+namespace ns3
+{
+
+NS_LOG_COMPONENT_DEFINE("TrafficClass");
+NS_OBJECT_ENSURE_REGISTERED(TrafficClass);
 
 TypeId
-TrafficClass::GetTypeId (void)
+TrafficClass::GetTypeId(void)
 {
-  static TypeId tid =
-      TypeId ("ns3::TrafficClass")
-        .SetParent<Object> ()
-        .SetGroupName ("TrafficControl");
-  return tid;
+    static TypeId tid =
+        TypeId("ns3::TrafficClass").SetParent<Object>().SetGroupName("TrafficControl");
+    return tid;
 }
 
-TrafficClass::TrafficClass ()
+TrafficClass::TrafficClass()
 {
-  NS_LOG_FUNCTION (this);
+    NS_LOG_FUNCTION(this);
 }
 
-TrafficClass::TrafficClass (uint32_t maxPackets, uint32_t maxBytes, double_t weight, uint32_t priority_level, bool isDefault, std::vector<Filter *> filters)
+TrafficClass::TrafficClass(uint32_t max_packets,
+                           uint32_t max_bytes,
+                           double_t weight,
+                           uint32_t priority_level,
+                           bool is_default,
+                           std::vector<Filter*> filters)
 {
-  this->maxPackets = maxPackets;
-  this->maxBytes = maxBytes;
-  this->weight = weight;
-  this->priority_level = priority_level;
-  this->isDefault = isDefault;
-  this->filters = filters;
-  NS_LOG_FUNCTION (this);
+    this->max_packets = max_packets;
+    this->max_bytes = max_bytes;
+    this->weight = weight;
+    this->priority_level = priority_level;
+    this->is_default = is_default;
+    this->filters = filters;
+    NS_LOG_FUNCTION(this);
 }
 
-TrafficClass::TrafficClass (uint32_t maxPackets,  uint32_t quantum_size, uint32_t deficit_counter, bool isDefault, std::vector<Filter *> filters)
+TrafficClass::TrafficClass(uint32_t maxPackets,
+                           uint32_t quantum_size,
+                           uint32_t deficit_counter,
+                           bool is_default,
+                           std::vector<Filter*> filters)
 {
-  this->maxPackets = maxPackets;
-  this->quantum_size = quantum_size;
-  this->deficit_counter = deficit_counter;
-  this->isDefault = isDefault;
-  this->filters = filters;
-  NS_LOG_FUNCTION (this);
+    this->max_packets = maxPackets;
+    this->quantum_size = quantum_size;
+    this->deficit_counter = deficit_counter;
+    this->is_default = is_default;
+    this->filters = filters;
+    NS_LOG_FUNCTION(this);
 }
 
-TrafficClass::~TrafficClass ()
+TrafficClass::~TrafficClass()
 {
-  NS_LOG_FUNCTION (this);
+    NS_LOG_FUNCTION(this);
 }
 
-//for each filter in vector of filter call match on each filter
-// even if one match -- return true
+// for each filter in vector of filter call match on each filter
+//  even if one match -- return true
 bool
-TrafficClass::match (Ptr<Packet> packet)
+TrafficClass::match(Ptr<Packet> packet)
 {
-  NS_LOG_FUNCTION (this << packet);
+    NS_LOG_FUNCTION(this << packet);
 
-  for (Filter *filter : filters)
+    for (Filter* filter : filters)
     {
-      if (filter->match (packet))
+        if (filter->match(packet))
         {
-          return true;
+            return true;
         }
     }
-  return false;
+    return false;
 }
 
 bool
-TrafficClass::IsEmpty ()
+TrafficClass::IsEmpty()
 {
-  return m_queue.empty ();
+    return m_queue.empty();
 }
-
 
 /***
  * To Enqueue the packet
  * */
 bool
-TrafficClass::Enqueue (Ptr<Packet> packet)
+TrafficClass::Enqueue(Ptr<Packet> packet)
 {
-  //std::cout<<"Test.TrafficClass.Enqueue.m_queue.size:"<<m_queue.size()<<std::endl;
-  bytes+=packet->GetSize();
-  m_queue.push (packet);
-  //std::cout<<"Test.TrafficClass.Enqueue.packet:"<<packet<<std::endl;
-  std::cout<<"Test.TrafficClass.Enqueue.m_queue.size.AFTER.PUSH:"<<m_queue.size()<<std::endl;  
+    bytes += packet->GetSize();
+    m_queue.push(packet);
 
-  return true;
+    return true;
 }
 
 /***
  * To Dequeue the packet
  * */
 Ptr<ns3::Packet>
-TrafficClass::Dequeue ()
+TrafficClass::Dequeue()
 {
-  // Ptr<Packet> p = m_queue.front();
-  // if(!m_queue.empty){
-  //   m_queue.pop();
-  // }
-  // if(p){
-  //   return p;
-  // }
-  // return 0;
-  NS_LOG_FUNCTION (this);
+    NS_LOG_FUNCTION(this);
 
-  if (m_queue.empty ())
+    if (m_queue.empty())
     {
-      NS_LOG_LOGIC ("Queue empty");
-      std::cout<<"Queue empty" <<std::endl;
-      return 0;
+        NS_LOG_LOGIC("Queue empty");
+        std::cout << "Queue empty" << std::endl;
+        return 0;
     }
 
-  Ptr<Packet> p = m_queue.front ();
-  m_queue.pop ();
-  bytes -= p-> GetSize ();
-  NS_LOG_LOGIC ("Popped " << p);
-  std::cout<< "Queue Size " << m_queue.size () << ",priority:"<< priority_level;
-  NS_LOG_LOGIC ("Number bytes " << bytes);
+    Ptr<Packet> p = m_queue.front();
+    m_queue.pop();
+    bytes -= p->GetSize();
+    NS_LOG_LOGIC("Popped " << p);
+    std::cout << "Queue Size " << m_queue.size() << ",priority:" << priority_level;
+    NS_LOG_LOGIC("Number bytes " << bytes);
 
-  return p;
+    return p;
 }
 
 /***
  * To Remove the packet
  * */
 Ptr<ns3::Packet>
-TrafficClass::Remove ()
+TrafficClass::Remove()
 {
-    if(!m_queue.empty()){
-       m_queue.pop();
-  }
-  return 0;
+    if (!m_queue.empty())
+    {
+        m_queue.pop();
+    }
+    return 0;
 }
 
 /***
  * To Peek the packet
  * */
 Ptr<ns3::Packet>
-TrafficClass::Peek ()
+TrafficClass::Peek()
 {
-  NS_LOG_FUNCTION (this);
+    NS_LOG_FUNCTION(this);
 
-  if (m_queue.empty ())
+    if (m_queue.empty())
     {
-      NS_LOG_LOGIC ("Queue empty");
-      std::cout<<"Queue empty" <<std::endl;
-    
-      return 0;
+        NS_LOG_LOGIC("Queue empty");
+        std::cout << "Queue empty" << std::endl;
+
+        return 0;
     }
 
-  Ptr<Packet> p = m_queue.front ();
-  packets = m_queue.size ();
-  bytes = bytes;
+    Ptr<Packet> p = m_queue.front();
+    packets = m_queue.size();
+    bytes = bytes;
 
-  return p;
+    return p;
 }
 
 void
@@ -179,8 +177,9 @@ TrafficClass::GetDeficitCounter()
 }
 
 uint32_t
-TrafficClass::GetMaxPacket(){
-  return maxPackets;
+TrafficClass::GetMaxPacket()
+{
+    return max_packets;
 }
 
 uint32_t
@@ -189,5 +188,15 @@ TrafficClass::GetPacketCount()
     return m_queue.size();
 }
 
+uint32_t
+TrafficClass::GetPriorityLevel()
+{
+    return priority_level;
+}
+
+bool
+TrafficClass::GetDefault(){
+    return is_default;
+}
 
 } // namespace ns3

@@ -213,7 +213,6 @@ main(int argc, char* argv[])
     CommandLine cmd;
     cmd.AddValue("filename", "Name of the configuration file", config_file);
     cmd.Parse(argc, argv);
-    config_file = "DRR";
 
     // Cjson code start
     if (!(config_file == "DRR" || config_file == "SPQ"))
@@ -325,8 +324,8 @@ main(int argc, char* argv[])
         nodes.Create(3);
 
         PointToPointHelper p2p;
-        p2p.SetDeviceAttribute("DataRate", StringValue("4Mbps"));
-        p2p.SetChannelAttribute("Delay", StringValue("2ms"));
+        p2p.SetDeviceAttribute("DataRate", StringValue("10Mbps"));
+        // p2p.SetChannelAttribute("Delay", StringValue("2ms"));
         NetDeviceContainer node01 = p2p.Install(nodes.Get(0), nodes.Get(1));
         // std::vector<TrafficClass*> traffics;
         // readConfigurationFile(fileName, traffics);
@@ -334,7 +333,7 @@ main(int argc, char* argv[])
 
         // p2p.SetDeviceAttribute ("DataRate", StringValue ("1Mbps"));
         p2p.SetDeviceAttribute("DataRate", StringValue("1Mbps"));
-        p2p.SetChannelAttribute("Delay", StringValue("2ms"));
+        // p2p.SetChannelAttribute("Delay", StringValue("2ms"));
 
         NetDeviceContainer node12 = p2p.Install(nodes.Get(1), nodes.Get(2));
 
@@ -368,7 +367,7 @@ main(int argc, char* argv[])
         // 2nd sender wıll have source port 49154
         // 49153
         UdpClientHelper echoClient(interfaces2.GetAddress(1), 9);
-        echoClient.SetAttribute("MaxPackets", UintegerValue(50000));
+        echoClient.SetAttribute("MaxPackets", UintegerValue(3000));
         echoClient.SetAttribute("Interval", TimeValue(Seconds(0.001)));
         echoClient.SetAttribute("PacketSize", UintegerValue(1000));
 
@@ -378,7 +377,7 @@ main(int argc, char* argv[])
 
         // 49154
         UdpClientHelper echoClient2(interfaces2.GetAddress(1), 10);
-        echoClient2.SetAttribute("MaxPackets", UintegerValue(75000));
+        echoClient2.SetAttribute("MaxPackets", UintegerValue(2000));
         echoClient2.SetAttribute("Interval", TimeValue(Seconds(0.001)));
         echoClient2.SetAttribute("PacketSize", UintegerValue(1000));
 
@@ -388,7 +387,7 @@ main(int argc, char* argv[])
 
         // 49155
         UdpClientHelper echoClient3(interfaces2.GetAddress(1), 11);
-        echoClient3.SetAttribute("MaxPackets", UintegerValue(100000));
+        echoClient3.SetAttribute("MaxPackets", UintegerValue(1000));
         echoClient3.SetAttribute("Interval", TimeValue(Seconds(0.001)));
         echoClient3.SetAttribute("PacketSize", UintegerValue(1000));
 

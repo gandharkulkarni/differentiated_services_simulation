@@ -1,17 +1,19 @@
 {
     "q1":{
-        "max_packets":"6000",
+        "max_packets":"3000",
         "max_bytes":"0",
-        "quantum_size":"400",
+        "quantum_size":"2060",
         "deficit_counter":"0",
-        "is_default":"1",
+        "is_default":"0",
         "filters":{
+            "source_port":"49153",
+            "destination_port":"10"
         }
     },
     "q2":{
-        "max_packets":"6000",
+        "max_packets":"2000",
         "max_bytes":"0",
-        "quantum_size":"800",
+        "quantum_size":"1030",
         "deficit_counter":"0",
         "is_default":"0",
         "filters":{
@@ -20,14 +22,12 @@
         }
     },
     "q3":{
-        "max_packets":"6000",
+        "max_packets":"1000",
         "max_bytes":"0",
-        "quantum_size":"1200",
+        "quantum_size":"515",
         "deficit_counter":"0",
-        "is_default":"0",
+        "is_default":"1",
         "filters":{
-            "source_port":"49155",
-            "destination_port":"10"
         }
     }
 

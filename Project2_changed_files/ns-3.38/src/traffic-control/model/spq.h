@@ -20,33 +20,30 @@ public:
 
   virtual ~SPQ ();
 
-  bool Enqueue (Ptr<Packet> item);
+  bool Enqueue (Ptr<Packet> item) override;
 
-  Ptr<Packet> Dequeue ();
+  Ptr<Packet> Dequeue () override;
 
-  Ptr<Packet> Remove ();
+  Ptr<Packet> Remove () override;
 
-  Ptr<const Packet> Peek (void) const;
+  Ptr<const Packet> Peek (void) const override;
 
-  u_int32_t Classify (Ptr<Packet> item);
+  u_int32_t Classify (Ptr<Packet> item) override;
 
-  Ptr<Packet> Schedule ();
-
-
-  bool AddTrafficClass (TrafficClass* trafficClass);
+  Ptr<Packet> Schedule () override;
 
   QueueMode m_mode; 
   std::vector<TrafficClass*> q_class; 
 
 private:
 
-   using DiffServ<Packet>::Enqueue;
-   using DiffServ<Packet>::Dequeue;
-   using DiffServ<Packet>::Remove;
-   using DiffServ<Packet>::Peek;
+  //  using DiffServ<Packet>::Enqueue;
+  //  using DiffServ<Packet>::Dequeue;
+  //  using DiffServ<Packet>::Remove;
+  //  using DiffServ<Packet>::Peek;
 
-   using DiffServ<Packet>::Schedule;
-   using DiffServ<Packet>::Classify;
+  //  using DiffServ<Packet>::Schedule;
+  //  using DiffServ<Packet>::Classify;
 
   NS_LOG_TEMPLATE_DECLARE;
 };

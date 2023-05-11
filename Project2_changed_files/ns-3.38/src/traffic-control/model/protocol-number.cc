@@ -41,11 +41,13 @@ namespace ns3 {
     {
     NS_LOG_FUNCTION (this << packet);
     
+    Ptr<Packet> packet_copy = packet->Copy();
+    PppHeader pppHeader;
+    packet_copy->RemoveHeader(pppHeader);
 
     Ipv4Header ipv4Header;
-    packet->PeekHeader(ipv4Header);
+    packet_copy->PeekHeader(ipv4Header);
 
-    
     uint8_t protocolNumber = ipv4Header.GetProtocol();
     
     std::cout << " ProtocolNumber.protocolNumber:" << protocolNumber << std::endl;

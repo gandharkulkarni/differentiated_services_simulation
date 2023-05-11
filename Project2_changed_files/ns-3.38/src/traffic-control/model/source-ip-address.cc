@@ -35,15 +35,17 @@ SourceIpAddress::~SourceIpAddress ()
 
 bool SourceIpAddress::match (Ptr<Packet> packet){
     NS_LOG_FUNCTION (this << packet);
-    Ptr<Packet> copy = packet->Copy ();
-    PppHeader ppph;
-		Ipv4Header iph;
-		copy->RemoveHeader(ppph);
-		copy->RemoveHeader(iph);
+    
+    Ptr<Packet> packet_copy = packet->Copy();
+    PppHeader pppHeader;
+    packet_copy->RemoveHeader(pppHeader);
+
+		Ipv4Header ipv4Header;
+		packet_copy->PeekHeader(ipv4Header);
 
     std::cout<<" value:" << value <<std::endl;
 
-		Ipv4Address Ipv4Address = iph.GetSource();
+		Ipv4Address Ipv4Address = ipv4Header.GetSource();
 		if(Ipv4Address == (this->value)){
 			std::cout<<" Matched Ipv4Address:" << Ipv4Address <<std::endl;
 			return true;

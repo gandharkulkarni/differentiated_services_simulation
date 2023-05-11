@@ -36,9 +36,14 @@ NS_OBJECT_ENSURE_REGISTERED (SourceMask);
     bool
     SourceMask::match (Ptr<Packet> packet) 
     {
-      NS_LOG_FUNCTION (this << packet);    
+      NS_LOG_FUNCTION (this << packet); 
+
+      Ptr<Packet> packet_copy = packet->Copy();
+      PppHeader pppHeader;
+      packet_copy->RemoveHeader(pppHeader);  
+       
       Ipv4Header ipv4Header;
-      packet->PeekHeader(ipv4Header);
+      packet_copy->PeekHeader(ipv4Header);
       Ipv4Address ipv4Address =ipv4Header.GetSource();
 
     if (ipv4Address == (ipv4Address.CombineMask(this->value))){  

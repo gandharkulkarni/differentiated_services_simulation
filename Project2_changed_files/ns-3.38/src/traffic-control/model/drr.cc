@@ -233,8 +233,8 @@ namespace ns3
                                                   q_class[i]->GetQuantumSize());
 
                     std::cout << "Schedule called. Getting packet from queue " << i << std::endl;
-                    // while (q_class[i]->GetPacketCount() != 0)
-                    if (q_class[i]->GetPacketCount() != 0)
+                    while (q_class[i]->GetPacketCount() != 0)
+                    // if (q_class[i]->GetPacketCount() != 0)
                     {
                         std::cout << "Packet available in queue " << i << std::endl;
                         Ptr<Packet> packet = q_class[i]->Peek();

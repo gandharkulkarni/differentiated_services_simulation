@@ -139,7 +139,6 @@ template <typename Packet>
 uint32_t
 DiffServ<Packet>::Classify (Ptr<ns3::Packet> p)
 {
-  std::cout<<"Test.DiffServ.Classify!"<<std::endl;
   NS_LOG_FUNCTION (this << p);
 
   uint32_t match_index = -1;
@@ -156,7 +155,6 @@ Ptr<ns3::Packet>
 DiffServ<Packet>::Schedule ()
 {
   NS_LOG_FUNCTION (this);  
-  std::cout<<"Test.DiffServ.Schedule!"<<std::endl;  
   return  0; 
 }
 

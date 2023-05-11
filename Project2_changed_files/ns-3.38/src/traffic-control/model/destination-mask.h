@@ -15,7 +15,7 @@ public:
   static TypeId GetTypeId (void);
 
   DestinationMask ();
-  DestinationMask (Ipv4Mask ipv4Mask);  
+  DestinationMask (Ipv4Address destination_ip_address, Ipv4Mask ipv4Mask);  
   ~DestinationMask ();
 
 
@@ -23,6 +23,7 @@ public:
 
 
 private:
+  Ipv4Address destination_ip_address;
   Ipv4Mask value;   
 
 };

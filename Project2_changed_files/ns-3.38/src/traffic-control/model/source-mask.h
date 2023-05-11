@@ -15,7 +15,7 @@ public:
   static TypeId GetTypeId (void);
 
   SourceMask ();
-  SourceMask (Ipv4Mask ipv4Mask);  
+  SourceMask (Ipv4Address source_ip_address, Ipv4Mask ipv4Mask);  
   ~SourceMask ();
 
   
@@ -23,6 +23,7 @@ public:
 
 
 private:
+  Ipv4Address source_ip_address;
   Ipv4Mask value;   
 
 };

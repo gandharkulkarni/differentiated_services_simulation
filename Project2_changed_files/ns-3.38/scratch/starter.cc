@@ -51,10 +51,11 @@ createFilter(const cJSON* filters)
         Ipv4Address address(cJSON_GetObjectItem(filters, "source_address")->valuestring);
         filterWithElement->elements.push_back(new SourceIpAddress(address));
     }
-    if (cJSON_GetObjectItem(filters, "source_mask"))
+    if (cJSON_GetObjectItem(filters, "source_mask") && cJSON_GetObjectItem(filters, "source_address"))
     {
+        Ipv4Address address(cJSON_GetObjectItem(filters, "source_address")->valuestring);
         Ipv4Mask mask(cJSON_GetObjectItem(filters, "source_mask")->valuestring);
-        filterWithElement->elements.push_back(new SourceMask(mask));
+        filterWithElement->elements.push_back(new SourceMask(address, mask));
     }
     if (cJSON_GetObjectItem(filters, "source_port"))
     {
@@ -66,10 +67,11 @@ createFilter(const cJSON* filters)
         Ipv4Address address(cJSON_GetObjectItem(filters, "destination_address")->valuestring);
         filterWithElement->elements.push_back(new DestinationIpAddress(address));
     }
-    if (cJSON_GetObjectItem(filters, "destination_mask"))
+    if (cJSON_GetObjectItem(filters, "destination_mask") && cJSON_GetObjectItem(filters, "destination_address"))
     {
+        Ipv4Address address(cJSON_GetObjectItem(filters, "destination_address")->valuestring);
         Ipv4Mask mask(cJSON_GetObjectItem(filters, "destination_mask")->valuestring);
-        filterWithElement->elements.push_back(new DestinationMask(mask));
+        filterWithElement->elements.push_back(new DestinationMask(address, mask));
     }
     if (cJSON_GetObjectItem(filters, "destination_port"))
     {
@@ -253,7 +255,7 @@ main(int argc, char* argv[])
 
         PointToPointHelper p2p;
         p2p.SetDeviceAttribute("DataRate", StringValue("4Mbps"));
-        p2p.SetChannelAttribute("Delay", StringValue("2ms"));
+        p2p.SetChannelAttribute("Delay", StringValue("10ms"));
         NetDeviceContainer node01 = p2p.Install(nodes.Get(0), nodes.Get(1));
         // std::vector<TrafficClass*> traffics;
         // readConfigurationFile(fileName, traffics);
@@ -261,7 +263,7 @@ main(int argc, char* argv[])
 
         // p2p.SetDeviceAttribute ("DataRate", StringValue ("1Mbps"));
         p2p.SetDeviceAttribute("DataRate", StringValue("1Mbps"));
-        p2p.SetChannelAttribute("Delay", StringValue("2ms"));
+        p2p.SetChannelAttribute("Delay", StringValue("10ms"));
 
         NetDeviceContainer node12 = p2p.Install(nodes.Get(1), nodes.Get(2));
 
@@ -330,8 +332,8 @@ main(int argc, char* argv[])
         nodes.Create(3);
 
         PointToPointHelper p2p;
-        p2p.SetDeviceAttribute("DataRate", StringValue("10Mbps"));
-        // p2p.SetChannelAttribute("Delay", StringValue("2ms"));
+        p2p.SetDeviceAttribute("DataRate", StringValue("4Mbps"));
+        p2p.SetChannelAttribute("Delay", StringValue("10ms"));
         NetDeviceContainer node01 = p2p.Install(nodes.Get(0), nodes.Get(1));
         // std::vector<TrafficClass*> traffics;
         // readConfigurationFile(fileName, traffics);
@@ -339,7 +341,7 @@ main(int argc, char* argv[])
 
         // p2p.SetDeviceAttribute ("DataRate", StringValue ("1Mbps"));
         p2p.SetDeviceAttribute("DataRate", StringValue("1Mbps"));
-        // p2p.SetChannelAttribute("Delay", StringValue("2ms"));
+        p2p.SetChannelAttribute("Delay", StringValue("10ms"));
 
         NetDeviceContainer node12 = p2p.Install(nodes.Get(1), nodes.Get(2));
 

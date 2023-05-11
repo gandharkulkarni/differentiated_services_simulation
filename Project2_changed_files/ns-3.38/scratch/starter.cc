@@ -110,6 +110,7 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
     filters = cJSON_GetObjectItem(q1, "filters");
 
     Filter* filter = createFilter(filters);
+
     std::vector<Filter*> filters_list;
     if (filter->elements.size() != 0)
     {
@@ -118,6 +119,7 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
 
     if (config_file == "SPQ")
     {
+        
         // TC object for first queue
         TrafficClass* tc1 = new TrafficClass(atoi(maxPackets->valuestring),
                                              atoi(maxBytes->valuestring),
@@ -136,6 +138,7 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         isDefault = cJSON_GetObjectItem(q2, "is_default");
         filters = cJSON_GetObjectItem(q2, "filters");
         filter = createFilter(filters);
+        filters_list.clear();
         if (filter->elements.size() != 0)
         {
             filters_list.push_back(filter);
@@ -168,6 +171,7 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         isDefault = cJSON_GetObjectItem(q2, "is_default");
         filters = cJSON_GetObjectItem(q2, "filters");
         filter = createFilter(filters);
+        filters_list.clear();
         if (filter->elements.size() != 0)
         {
             filters_list.push_back(filter);
@@ -189,10 +193,12 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         isDefault = cJSON_GetObjectItem(q3, "is_default");
         filters = cJSON_GetObjectItem(q3, "filters");
         filter = createFilter(filters);
+        filters_list.clear();
         if (filter->elements.size() != 0)
         {
             filters_list.push_back(filter);
         }
+
         // TC object for third queue
         TrafficClass* tc3 = new TrafficClass(atoi(maxPackets->valuestring),
                                              atoi(quantumSize->valuestring),
@@ -298,7 +304,7 @@ main(int argc, char* argv[])
         client1.Stop(Seconds(10000.0));
 
         // 49154
-        UdpClientHelper echoClient2(interfaces2.GetAddress(1), 10);
+        UdpClientHelper echoClient2(interfaces2.GetAddress(1), 9);
         echoClient2.SetAttribute("MaxPackets", UintegerValue(75000));
         echoClient2.SetAttribute("Interval", TimeValue(Seconds(0.001)));
         echoClient2.SetAttribute("PacketSize", UintegerValue(1000));
@@ -363,6 +369,11 @@ main(int argc, char* argv[])
         serverApps2.Start(Seconds(1.0));
         serverApps2.Stop(Seconds(10000.0));
 
+        /**
+         * ns3::UdpClientHelper::UdpClientHelper(Address ip, uint16_t port)
+         * 	ip	The IP address of the remote UDP server
+         * port	The port number of the remote UDP server	
+        */
         // 1st sender wıll have source port 49153
         // 2nd sender wıll have source port 49154
         // 49153
@@ -376,7 +387,7 @@ main(int argc, char* argv[])
         client1.Stop(Seconds(10000.0));
 
         // 49154
-        UdpClientHelper echoClient2(interfaces2.GetAddress(1), 10);
+        UdpClientHelper echoClient2(interfaces2.GetAddress(1), 9);
         echoClient2.SetAttribute("MaxPackets", UintegerValue(2000));
         echoClient2.SetAttribute("Interval", TimeValue(Seconds(0.001)));
         echoClient2.SetAttribute("PacketSize", UintegerValue(1000));
@@ -386,7 +397,7 @@ main(int argc, char* argv[])
         client2.Stop(Seconds(10000.0));
 
         // 49155
-        UdpClientHelper echoClient3(interfaces2.GetAddress(1), 11);
+        UdpClientHelper echoClient3(interfaces2.GetAddress(1), 9);
         echoClient3.SetAttribute("MaxPackets", UintegerValue(1000));
         echoClient3.SetAttribute("Interval", TimeValue(Seconds(0.001)));
         echoClient3.SetAttribute("PacketSize", UintegerValue(1000));

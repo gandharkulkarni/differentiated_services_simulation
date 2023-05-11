@@ -30,7 +30,6 @@ SPQ<Packet>::SPQ (QueueMode mode, std::vector<TrafficClass *> trafficClassList)
 {
   this->m_mode = mode;
   this->q_class = trafficClassList;
-  std::cout << "SPQ.q_class.size: " << q_class.size () << std::endl;
   NS_LOG_FUNCTION (this);
 }
 
@@ -49,12 +48,10 @@ SPQ<Packet>::Enqueue (Ptr<Packet> p)
 {
   NS_LOG_FUNCTION (this << p);
 
-  printf ("Test.SPQ.Enqueue\n");
   u_int32_t index = Classify (p);
 
   q_class[index]->Enqueue (p);
 
-  DiffServ<Packet>::Enqueue(p);
 
   return true;
 }
@@ -67,11 +64,8 @@ Ptr<Packet>
 SPQ<Packet>::Dequeue (void)
 {
   NS_LOG_FUNCTION (this);
-  printf ("Test.SPQ.Dequeue\n");
   Ptr<Packet> p;
   p = Schedule ();
-  std::cout << "Schedule p in final Dequeue" << &p << std::endl;
-  DiffServ<Packet>::Dequeue();
   return p;
 }
 

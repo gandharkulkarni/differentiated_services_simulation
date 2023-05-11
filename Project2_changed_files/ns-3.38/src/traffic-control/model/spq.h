@@ -28,9 +28,9 @@ public:
 
   Ptr<const Packet> Peek (void) const override;
 
-  u_int32_t Classify (Ptr<Packet> item) override;
+  uint32_t Classify (Ptr<Packet> item);
 
-  Ptr<Packet> Schedule () override;
+  Ptr<Packet> Schedule ();
 
   QueueMode m_mode; 
   std::vector<TrafficClass*> q_class; 

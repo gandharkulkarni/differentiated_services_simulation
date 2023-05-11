@@ -102,7 +102,6 @@ TrafficClass::Dequeue()
     if (m_queue.empty())
     {
         NS_LOG_LOGIC("Queue empty");
-        std::cout << "Queue empty" << std::endl;
         return 0;
     }
 
@@ -110,7 +109,6 @@ TrafficClass::Dequeue()
     m_queue.pop();
     bytes -= p->GetSize();
     NS_LOG_LOGIC("Popped " << p);
-    std::cout << "Queue Size " << m_queue.size() << ",priority:" << priority_level;
     NS_LOG_LOGIC("Number bytes " << bytes);
 
     return p;
@@ -140,7 +138,6 @@ TrafficClass::Peek()
     if (m_queue.empty())
     {
         NS_LOG_LOGIC("Queue empty");
-        std::cout << "Queue empty" << std::endl;
 
         return 0;
     }
@@ -195,7 +192,8 @@ TrafficClass::GetPriorityLevel()
 }
 
 bool
-TrafficClass::GetDefault(){
+TrafficClass::GetDefault()
+{
     return is_default;
 }
 

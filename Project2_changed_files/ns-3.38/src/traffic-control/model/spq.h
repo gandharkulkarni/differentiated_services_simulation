@@ -37,14 +37,6 @@ public:
 
 private:
 
-  //  using DiffServ<Packet>::Enqueue;
-  //  using DiffServ<Packet>::Dequeue;
-  //  using DiffServ<Packet>::Remove;
-  //  using DiffServ<Packet>::Peek;
-
-  //  using DiffServ<Packet>::Schedule;
-  //  using DiffServ<Packet>::Classify;
-
   NS_LOG_TEMPLATE_DECLARE;
 };
 

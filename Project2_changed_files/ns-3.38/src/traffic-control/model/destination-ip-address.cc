@@ -50,12 +50,10 @@ DestinationIpAddress::match (Ptr<Packet> packet)
 
   if (Ipv4Address == (value))
     {
-      std::cout << " Matched Ipv4Address:" << Ipv4Address << std::endl;
       return true;
     }
   else
     {
-      std::cout << " Not Matched Ipv4Address:" << Ipv4Address << std::endl;
       return false;
     }
 }

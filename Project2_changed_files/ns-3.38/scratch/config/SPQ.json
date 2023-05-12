@@ -1,19 +1,22 @@
 {
     "q1":{
-        "max_packets":"10000",
+        "max_packets":"75000",
         "max_bytes":"0",
-        "weight":"0",
         "priority_level":"0",
         "is_default":"0",
         "filters":{
+            "destination_address":"10.1.2.2",
+            "destination_mask":"255.255.255.0",
+            "source_address":"10.1.1.1",
+            "source_mask":"255.255.255.0",
+            "protocol": "17",
             "source_port":"49154",
-            "destination_port":"10"
+            "destination_port":"9"
         }
     },
     "q2":{
-        "max_packets":"15000",
+        "max_packets":"50000",
         "max_bytes":"0",
-        "weight":"0",
         "priority_level":"1",
         "is_default":"1",
         "filters":{

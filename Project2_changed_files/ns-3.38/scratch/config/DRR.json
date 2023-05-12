@@ -3,29 +3,26 @@
         "max_packets":"3000",
         "max_bytes":"0",
         "quantum_size":"2060",
-        "deficit_counter":"0",
         "is_default":"0",
         "filters":{
             "source_port":"49153",
-            "destination_port":"10"
+            "destination_port":"9"
         }
     },
     "q2":{
         "max_packets":"2000",
         "max_bytes":"0",
         "quantum_size":"1030",
-        "deficit_counter":"0",
         "is_default":"0",
         "filters":{
             "source_port":"49154",
-            "destination_port":"10"
+            "destination_port":"9"
         }
     },
     "q3":{
         "max_packets":"1000",
         "max_bytes":"0",
         "quantum_size":"515",
-        "deficit_counter":"0",
         "is_default":"1",
         "filters":{
         }

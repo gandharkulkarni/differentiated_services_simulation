@@ -15,7 +15,7 @@ namespace ns3{
     {
         static TypeId tid = TypeId ("ns3::DestinationPortNumber")
                 .SetParent<FilterElement> ()
-                .SetGroupName ("trafficControl")
+                .SetGroupName ("QoS")
         ;
         return tid;
     }

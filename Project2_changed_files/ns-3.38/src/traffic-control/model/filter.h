@@ -4,6 +4,7 @@
  
 #include "ns3/log.h"
 #include "filter-element.h"
+
 namespace ns3 {
 
 class Filter: public Object {
@@ -12,6 +13,7 @@ class Filter: public Object {
 
   Filter ();
   ~Filter ();
+
 
   std::vector<ns3::FilterElement*> elements;
   bool match (Ptr<ns3::Packet> packet);  

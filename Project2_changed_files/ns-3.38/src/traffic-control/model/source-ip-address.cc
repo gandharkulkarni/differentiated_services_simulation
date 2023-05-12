@@ -1,58 +1,61 @@
-#include "ns3/log.h"
-#include "ns3/ipv4-header.h"
-#include "ns3/point-to-point-net-device.h"
 #include "source-ip-address.h"
 
-namespace ns3 {
+#include "ns3/ipv4-header.h"
+#include "ns3/log.h"
+#include "ns3/point-to-point-net-device.h"
 
-NS_LOG_COMPONENT_DEFINE ("SourceIpAddress");
-
-NS_OBJECT_ENSURE_REGISTERED (SourceIpAddress);
-
-TypeId
-SourceIpAddress::GetTypeId (void)
+namespace ns3
 {
-  static TypeId tid =
-      TypeId ("ns3::SourceIpAddress").SetParent<FilterElement> ().SetGroupName ("trafficControl");
-  return tid;
-}
 
-SourceIpAddress::SourceIpAddress ()
-{
-  NS_LOG_FUNCTION (this);
-}
+    NS_LOG_COMPONENT_DEFINE("SourceIpAddress");
 
-SourceIpAddress::SourceIpAddress (Ipv4Address ipV4Address)
-{
-  NS_LOG_FUNCTION (this);
-  this->value = ipV4Address;
-}
+    NS_OBJECT_ENSURE_REGISTERED(SourceIpAddress);
 
-SourceIpAddress::~SourceIpAddress ()
-{
-  NS_LOG_FUNCTION (this);
-}
+    TypeId
+    SourceIpAddress::GetTypeId(void)
+    {
+        static TypeId tid =
+            TypeId("ns3::SourceIpAddress").SetParent<FilterElement>().SetGroupName("QoS");
+        return tid;
+    }
 
-bool SourceIpAddress::match (Ptr<Packet> packet){
-    NS_LOG_FUNCTION (this << packet);
-    
-    Ptr<Packet> packet_copy = packet->Copy();
-    PppHeader pppHeader;
-    packet_copy->RemoveHeader(pppHeader);
+    SourceIpAddress::SourceIpAddress()
+    {
+        NS_LOG_FUNCTION(this);
+    }
 
-		Ipv4Header ipv4Header;
-		packet_copy->PeekHeader(ipv4Header);
+    SourceIpAddress::SourceIpAddress(Ipv4Address ipV4Address)
+    {
+        NS_LOG_FUNCTION(this);
+        this->value = ipV4Address;
+    }
 
-    std::cout<<" value:" << value <<std::endl;
+    SourceIpAddress::~SourceIpAddress()
+    {
+        NS_LOG_FUNCTION(this);
+    }
 
-		Ipv4Address Ipv4Address = ipv4Header.GetSource();
-		if(Ipv4Address == (this->value)){
-			std::cout<<" Matched Ipv4Address:" << Ipv4Address <<std::endl;
-			return true;
-		}  else{
-			std::cout<<" Not Matched Ipv4Address:" << Ipv4Address <<std::endl;
-			return false;
-		}
+    bool
+    SourceIpAddress::match(Ptr<Packet> packet)
+    {
+        NS_LOG_FUNCTION(this << packet);
+
+        Ptr<Packet> packet_copy = packet->Copy();
+        PppHeader pppHeader;
+        packet_copy->RemoveHeader(pppHeader);
+
+        Ipv4Header ipv4Header;
+        packet_copy->PeekHeader(ipv4Header);
+
+        Ipv4Address Ipv4Address = ipv4Header.GetSource();
+        if (Ipv4Address == (this->value))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 } // namespace ns3

@@ -16,16 +16,14 @@ namespace ns3{
     {
         static TypeId tid = TypeId ("ns3::SourcePortNumber")
                 .SetParent<FilterElement> ()
-                .SetGroupName ("trafficControl")
+                .SetGroupName ("QoS")
         ;
         return tid;
     }
 
     SourcePortNumber::SourcePortNumber (uint32_t val)
     {
-        value = val;
-        std::cout << " Constructor.SourcePortNumber.value:" << value << std::endl;
-
+        this->value = val;
     }
 
 

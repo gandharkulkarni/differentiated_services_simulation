@@ -6,7 +6,7 @@
 #include "ns3/integer.h"
 #include "ns3/ppp-header.h"
 #include "ns3/pointer.h"
-#include "queue-disc.h"
+#include "ns3/packet.h"
 
 namespace ns3 {
 

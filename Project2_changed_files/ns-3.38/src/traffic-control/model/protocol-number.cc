@@ -1,68 +1,59 @@
-#include "ns3/log.h"
 #include "protocol-number.h"
 
-namespace ns3 {
+#include "ns3/log.h"
 
-    NS_LOG_COMPONENT_DEFINE ("ProtocolNumber");
+namespace ns3
+{
 
+    NS_LOG_COMPONENT_DEFINE("ProtocolNumber");
 
-    NS_OBJECT_ENSURE_REGISTERED (ProtocolNumber);
+    NS_OBJECT_ENSURE_REGISTERED(ProtocolNumber);
 
-    TypeId 
-    ProtocolNumber::GetTypeId (void)
+    TypeId
+    ProtocolNumber::GetTypeId(void)
     {
-    static TypeId tid = TypeId ("ns3::ProtocolNumber")
-        .SetParent<Object> ()
-        .SetGroupName ("TrafficControl")
-    ;
-    return tid;
+        static TypeId tid =
+            TypeId("ns3::ProtocolNumber").SetParent<Object>().SetGroupName("QoS");
+        return tid;
     }
 
-
-    ProtocolNumber::ProtocolNumber ()
+    ProtocolNumber::ProtocolNumber()
     {
-    NS_LOG_FUNCTION (this);
+        NS_LOG_FUNCTION(this);
     }
 
     ProtocolNumber::~ProtocolNumber()
     {
-    NS_LOG_FUNCTION (this); 
-
+        NS_LOG_FUNCTION(this);
     }
 
-    ProtocolNumber::ProtocolNumber (uint32_t val)
+    ProtocolNumber::ProtocolNumber(uint32_t val)
     {
         value = val;
     }
 
-    
     bool
-    ProtocolNumber::match (Ptr<Packet> packet)
+    ProtocolNumber::match(Ptr<Packet> packet)
     {
-    NS_LOG_FUNCTION (this << packet);
-    
-    Ptr<Packet> packet_copy = packet->Copy();
-    PppHeader pppHeader;
-    packet_copy->RemoveHeader(pppHeader);
+        NS_LOG_FUNCTION(this << packet);
 
-    Ipv4Header ipv4Header;
-    packet_copy->PeekHeader(ipv4Header);
+        Ptr<Packet> packet_copy = packet->Copy();
+        PppHeader pppHeader;
+        packet_copy->RemoveHeader(pppHeader);
 
-    uint8_t protocolNumber = ipv4Header.GetProtocol();
-    
-    std::cout << " ProtocolNumber.protocolNumber:" << protocolNumber << std::endl;
-    std::cout << " ProtocolNumber.value:" << value << std::endl;
+        Ipv4Header ipv4Header;
+        packet_copy->PeekHeader(ipv4Header);
 
-    if(protocolNumber==value ){
-        std::cout<<" Matched protocolNumber:" << protocolNumber <<std::endl;
-        return true;
-    }  else{
-        std::cout<<" Not Matched protocolNumber:" << protocolNumber <<std::endl;
-        return false;
+        uint8_t protocolNumber = ipv4Header.GetProtocol();
 
-    } 
-
+        if (protocolNumber == value)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
-
-}// namespace ns3
+} // namespace ns3

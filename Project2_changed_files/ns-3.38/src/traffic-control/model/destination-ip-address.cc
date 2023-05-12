@@ -14,7 +14,7 @@ DestinationIpAddress::GetTypeId (void)
 {
   static TypeId tid = TypeId ("ns3::DestinationIpAddress")
     .SetParent<FilterElement> ()
-    .SetGroupName ("trafficControl");
+    .SetGroupName ("QoS");
   return tid;
 }
 

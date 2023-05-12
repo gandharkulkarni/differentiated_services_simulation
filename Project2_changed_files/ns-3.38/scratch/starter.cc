@@ -94,20 +94,20 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
     const cJSON* q3 = NULL;
     const cJSON* maxPackets = NULL;
     const cJSON* maxBytes = NULL;
-    const cJSON* weight = NULL;
+    // const cJSON* weight = NULL;
     const cJSON* priorityLevel = NULL;
     const cJSON* quantumSize = NULL;
-    const cJSON* deficitCounter = NULL;
+    // const cJSON* deficitCounter = NULL;
     const cJSON* isDefault = NULL;
     const cJSON* filters = NULL;
 
     q1 = cJSON_GetObjectItemCaseSensitive(json, "q1");
     maxPackets = cJSON_GetObjectItem(q1, "max_packets");
     maxBytes = cJSON_GetObjectItem(q1, "max_bytes");
-    weight = cJSON_GetObjectItem(q1, "weight");
+    // weight = cJSON_GetObjectItem(q1, "weight");
     priorityLevel = cJSON_GetObjectItem(q1, "priority_level");
     quantumSize = cJSON_GetObjectItem(q1, "quantum_size");
-    deficitCounter = cJSON_GetObjectItem(q1, "deficit_counter");
+    // deficitCounter = cJSON_GetObjectItem(q1, "deficit_counter");
     isDefault = cJSON_GetObjectItem(q1, "is_default");
     filters = cJSON_GetObjectItem(q1, "filters");
 
@@ -125,7 +125,6 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         // TC object for first queue
         TrafficClass* tc1 = new TrafficClass(atoi(maxPackets->valuestring),
                                              atoi(maxBytes->valuestring),
-                                             atoi(weight->valuestring),
                                              atoi(priorityLevel->valuestring),
                                              atoi(isDefault->valuestring),
                                              filters_list);
@@ -135,7 +134,7 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
 
         maxPackets = cJSON_GetObjectItem(q2, "max_packets");
         maxBytes = cJSON_GetObjectItem(q2, "max_bytes");
-        weight = cJSON_GetObjectItem(q2, "weight");
+        // weight = cJSON_GetObjectItem(q2, "weight");
         priorityLevel = cJSON_GetObjectItem(q2, "priority_level");
         isDefault = cJSON_GetObjectItem(q2, "is_default");
         filters = cJSON_GetObjectItem(q2, "filters");
@@ -148,7 +147,6 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         // TC object for first queue
         TrafficClass* tc2 = new TrafficClass(atoi(maxPackets->valuestring),
                                              atoi(maxBytes->valuestring),
-                                             atoi(weight->valuestring),
                                              atoi(priorityLevel->valuestring),
                                              atoi(isDefault->valuestring),
                                              filters_list);
@@ -159,7 +157,7 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         // TC object for first queue
         TrafficClass* tc1 = new TrafficClass(atoi(maxPackets->valuestring),
                                              atoi(quantumSize->valuestring),
-                                             atoi(deficitCounter->valuestring),
+                                            //  atoi(deficitCounter->valuestring),
                                              atoi(isDefault->valuestring),
                                              filters_list);
         result.push_back(tc1);
@@ -169,7 +167,7 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         maxPackets = cJSON_GetObjectItem(q2, "max_packets");
         maxBytes = cJSON_GetObjectItem(q2, "max_bytes");
         quantumSize = cJSON_GetObjectItem(q2, "quantum_size");
-        deficitCounter = cJSON_GetObjectItem(q2, "deficit_counter");
+        // deficitCounter = cJSON_GetObjectItem(q2, "deficit_counter");
         isDefault = cJSON_GetObjectItem(q2, "is_default");
         filters = cJSON_GetObjectItem(q2, "filters");
         filter = createFilter(filters);
@@ -181,7 +179,7 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         // TC object for second queue
         TrafficClass* tc2 = new TrafficClass(atoi(maxPackets->valuestring),
                                              atoi(quantumSize->valuestring),
-                                             atoi(deficitCounter->valuestring),
+                                            //  atoi(deficitCounter->valuestring),
                                              atoi(isDefault->valuestring),
                                              filters_list);
         result.push_back(tc2);
@@ -191,7 +189,7 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         maxPackets = cJSON_GetObjectItem(q3, "max_packets");
         maxBytes = cJSON_GetObjectItem(q3, "max_bytes");
         quantumSize = cJSON_GetObjectItem(q3, "quantum_size");
-        deficitCounter = cJSON_GetObjectItem(q3, "deficit_counter");
+        // deficitCounter = cJSON_GetObjectItem(q3, "deficit_counter");
         isDefault = cJSON_GetObjectItem(q3, "is_default");
         filters = cJSON_GetObjectItem(q3, "filters");
         filter = createFilter(filters);
@@ -204,7 +202,7 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         // TC object for third queue
         TrafficClass* tc3 = new TrafficClass(atoi(maxPackets->valuestring),
                                              atoi(quantumSize->valuestring),
-                                             atoi(deficitCounter->valuestring),
+                                            //  atoi(deficitCounter->valuestring),
                                              atoi(isDefault->valuestring),
                                              filters_list);
         result.push_back(tc3);
@@ -252,22 +250,20 @@ main(int argc, char* argv[])
     {
         NodeContainer nodes;
         nodes.Create(3);
-
+        std::cout<<"Nodes created"<<std::endl;
         PointToPointHelper p2p;
         p2p.SetDeviceAttribute("DataRate", StringValue("4Mbps"));
         p2p.SetChannelAttribute("Delay", StringValue("10ms"));
         NetDeviceContainer node01 = p2p.Install(nodes.Get(0), nodes.Get(1));
-        // std::vector<TrafficClass*> traffics;
-        // readConfigurationFile(fileName, traffics);
-        // std::cout<< "traffics.size: " << traffics.size() <<std::endl;
-
-        // p2p.SetDeviceAttribute ("DataRate", StringValue ("1Mbps"));
+ 
         p2p.SetDeviceAttribute("DataRate", StringValue("1Mbps"));
         p2p.SetChannelAttribute("Delay", StringValue("10ms"));
 
         NetDeviceContainer node12 = p2p.Install(nodes.Get(1), nodes.Get(2));
 
         Ptr<PointToPointNetDevice> router_send = DynamicCast<PointToPointNetDevice>(node12.Get(0));
+
+        std::cout<<"SPQ simulation started"<<std::endl;
 
         Ptr<SPQ<Packet>> queue2 = new SPQ<Packet>(QueueMode::QUEUE_MODE_PACKETS, traffics);
         router_send->SetQueue(queue2);
@@ -288,10 +284,10 @@ main(int argc, char* argv[])
         serverApps.Start(Seconds(1.0));
         serverApps.Stop(Seconds(10000.0));
 
-        UdpServerHelper echoServer2(10);
-        ApplicationContainer serverApps2 = echoServer2.Install(nodes.Get(2));
-        serverApps2.Start(Seconds(1.0));
-        serverApps2.Stop(Seconds(10000.0));
+        // UdpServerHelper echoServer2(10);
+        // ApplicationContainer serverApps2 = echoServer2.Install(nodes.Get(2));
+        // serverApps2.Start(Seconds(1.0));
+        // serverApps2.Stop(Seconds(10000.0));
 
         // 1st sender wıll have source port 49153
         // 2nd sender wıll have source port 49154
@@ -312,40 +308,34 @@ main(int argc, char* argv[])
         echoClient2.SetAttribute("PacketSize", UintegerValue(1000));
 
         ApplicationContainer client2 = echoClient2.Install(nodes.Get(0));
-        client2.Start(Seconds(30.000)); // 5.101
+        client2.Start(Seconds(30.000)); 
         client2.Stop(Seconds(10000.0));
-
-        // AnimationInterface anim ("spq_topology.xml");
-        // anim.SetConstantPosition (nodes.Get(0), 0, 0);
-        // anim.SetConstantPosition (nodes.Get(1), 10, 10);
-        // anim.SetConstantPosition (nodes.Get(2), 20, 20);
 
         p2p.EnablePcapAll("spq");
 
         Simulator::Run();
         Simulator::Destroy();
+        std::cout<<"Pcap file generated"<<std::endl;
         return 0;
     }
     else if (config_file == "DRR")
     {
         NodeContainer nodes;
         nodes.Create(3);
-
+        std::cout<<"Nodes created"<<std::endl;
         PointToPointHelper p2p;
         p2p.SetDeviceAttribute("DataRate", StringValue("4Mbps"));
         p2p.SetChannelAttribute("Delay", StringValue("10ms"));
         NetDeviceContainer node01 = p2p.Install(nodes.Get(0), nodes.Get(1));
-        // std::vector<TrafficClass*> traffics;
-        // readConfigurationFile(fileName, traffics);
-        // std::cout<< "traffics.size: " << traffics.size() <<std::endl;
-
-        // p2p.SetDeviceAttribute ("DataRate", StringValue ("1Mbps"));
+ 
         p2p.SetDeviceAttribute("DataRate", StringValue("1Mbps"));
         p2p.SetChannelAttribute("Delay", StringValue("10ms"));
 
         NetDeviceContainer node12 = p2p.Install(nodes.Get(1), nodes.Get(2));
 
         Ptr<PointToPointNetDevice> router_send = DynamicCast<PointToPointNetDevice>(node12.Get(0));
+
+        std::cout<<"DRR simulation started"<<std::endl;
 
         Ptr<DRR<Packet>> queue3 = new DRR<Packet>(QueueMode::QUEUE_MODE_PACKETS, traffics);
         router_send->SetQueue(queue3);
@@ -366,16 +356,11 @@ main(int argc, char* argv[])
         serverApps.Start(Seconds(1.0));
         serverApps.Stop(Seconds(10000.0));
 
-        UdpServerHelper echoServer2(10);
-        ApplicationContainer serverApps2 = echoServer2.Install(nodes.Get(2));
-        serverApps2.Start(Seconds(1.0));
-        serverApps2.Stop(Seconds(10000.0));
+        // UdpServerHelper echoServer2(10);
+        // ApplicationContainer serverApps2 = echoServer2.Install(nodes.Get(2));
+        // serverApps2.Start(Seconds(1.0));
+        // serverApps2.Stop(Seconds(10000.0));
 
-        /**
-         * ns3::UdpClientHelper::UdpClientHelper(Address ip, uint16_t port)
-         * 	ip	The IP address of the remote UDP server
-         * port	The port number of the remote UDP server	
-        */
         // 1st sender wıll have source port 49153
         // 2nd sender wıll have source port 49154
         // 49153
@@ -408,15 +393,11 @@ main(int argc, char* argv[])
         client3.Start(Seconds(3.000));
         client3.Stop(Seconds(10000.0));
 
-        // AnimationInterface anim ("spq_topology.xml");
-        // anim.SetConstantPosition (nodes.Get(0), 0, 0);
-        // anim.SetConstantPosition (nodes.Get(1), 10, 10);
-        // anim.SetConstantPosition (nodes.Get(2), 20, 20);
-
         p2p.EnablePcapAll("drr");
 
         Simulator::Run();
         Simulator::Destroy();
+        std::cout<<"Pcap file generated"<<std::endl;
         return 0;
     }
     return 0;

@@ -25,7 +25,7 @@ namespace ns3 {
     bool Filter::match (Ptr<ns3::Packet> packet){
       auto iter = elements.begin();     
       for(;iter!=elements.end();iter++){
-          std::cout<<*iter<<" "; 
+          // std::cout<<*iter<<" "; 
           if ((**iter).match(packet)==false){              
               return false;
           }                             

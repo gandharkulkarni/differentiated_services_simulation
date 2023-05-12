@@ -21,13 +21,11 @@ class TrafficClass : public Object
     TrafficClass();
     TrafficClass(uint32_t maxPackets,
                  uint32_t maxBytes,
-                 double_t weight,
                  uint32_t priority_level,
                  bool isDefault,
                  std::vector<Filter*> filters);
     TrafficClass(uint32_t maxPackets,
                  uint32_t quantum_size,
-                 uint32_t deficit_counter,
                  bool isDefault,
                  std::vector<Filter*> filters);
     ~TrafficClass();
@@ -58,7 +56,6 @@ class TrafficClass : public Object
     uint32_t packets;
     uint32_t max_packets; 
     uint32_t max_bytes;   
-    double_t weight;     //Todo : Remove, 
     uint32_t priority_level;
     std::queue<Ptr<Packet>> m_queue;
     uint32_t quantum_size;

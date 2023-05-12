@@ -12,7 +12,7 @@ SPQ<Packet>::GetTypeId (void)
   static TypeId tid =
       TypeId ((GetTemplateClassName<SPQ<Packet>> () ))
           .SetParent<DiffServ<Packet>> ()
-          .SetGroupName ("trafficControl")
+          .SetGroupName ("QoS")
           .template AddConstructor<SPQ<Packet>> () 
       ;
   return tid;

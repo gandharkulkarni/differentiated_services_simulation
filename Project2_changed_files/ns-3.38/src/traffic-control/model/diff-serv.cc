@@ -19,7 +19,7 @@ DiffServ<Packet>::GetTypeId (void)
   static TypeId tid =
       TypeId ((GetTemplateClassName<DiffServ<Packet>> ()))
           .SetParent<Queue<Packet>> ()
-          .SetGroupName ("trafficClass")
+          .SetGroupName ("QoS")
           .template AddConstructor<DiffServ<Packet>> ();
   return tid;
 }

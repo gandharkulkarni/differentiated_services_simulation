@@ -14,7 +14,7 @@ DRR<Packet>::GetTypeId(void)
 {
     static TypeId tid = TypeId(GetTemplateClassName<DRR<Packet>>())
                             .SetParent<DiffServ<Packet>>()
-                            .SetGroupName("trafficControl")
+                            .SetGroupName("QoS")
                             .template AddConstructor<DRR<Packet>>();
     return tid;
 }

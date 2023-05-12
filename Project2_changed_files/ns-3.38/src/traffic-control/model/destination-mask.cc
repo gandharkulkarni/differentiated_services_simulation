@@ -15,7 +15,7 @@ TypeId
 DestinationMask::GetTypeId(void)
 {
     static TypeId tid =
-        TypeId("ns3::DestinationMask").SetParent<FilterElement>().SetGroupName("TrafficControl");
+        TypeId("ns3::DestinationMask").SetParent<FilterElement>().SetGroupName("QoS");
     return tid;
 }
 

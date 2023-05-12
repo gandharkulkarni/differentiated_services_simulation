@@ -33,13 +33,7 @@ class DRR : public DiffServ<Packet>
     Ptr<const Packet> DoPeek() const;
 
   private:
-    using DiffServ<Packet>::Enqueue;
-    using DiffServ<Packet>::Dequeue;
-    using DiffServ<Packet>::Remove;
-    using DiffServ<Packet>::Peek;
-
-    using DiffServ<Packet>::Schedule;
-    using DiffServ<Packet>::Classify;
+    uint32_t active_queue_index;
     std::vector<uint32_t> active_list;
     std::queue<Ptr<Packet>> service_queue;
 

@@ -36,7 +36,7 @@ public:
   std::vector<TrafficClass*> q_class; 
 
 private:
-
+  uint32_t active_queue_index;
   NS_LOG_TEMPLATE_DECLARE;
 };
 

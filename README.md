@@ -11,8 +11,6 @@ Network programming project : A Base Class to Simulate Differentiated Services
 Installing the dependencies
 ```
 apt install g++ python3 cmake ninja-build git
-apt install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
-apt install qt5-default
 ```
 
 Setting up project

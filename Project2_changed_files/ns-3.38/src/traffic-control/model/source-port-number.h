@@ -7,6 +7,10 @@
 
 
 namespace ns3 {
+    /**
+     * Class to compare source port number of packet
+     * @author Gandhar Kulkarni
+    */
     class SourcePortNumber: public FilterElement {
     public:
         

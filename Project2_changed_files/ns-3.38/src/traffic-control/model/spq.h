@@ -7,6 +7,10 @@
 
 namespace ns3 {
 
+/**
+ * Class to simulate Strict Priority Queueing differentiated service
+ * @author Gandhar Kulkarni
+*/
 template <typename Packet>
 class SPQ : public DiffServ<Packet> 
 {

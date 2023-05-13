@@ -7,7 +7,10 @@
 #include "ns3/ipv4-address.h" 
 
 namespace ns3 {
-
+/**
+ * Class to compare Source IP Address of packet
+ * @author Gandhar Kulkarni
+*/
 class SourceIpAddress: public FilterElement {
 public:
 

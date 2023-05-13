@@ -53,8 +53,10 @@ TrafficClass::~TrafficClass()
     NS_LOG_FUNCTION(this);
 }
 
-// for each filter in vector of filter call match on each filter
-//  even if one match -- return true
+/**
+ * Compares packet against filter parameters
+ * @return bool
+*/
 bool
 TrafficClass::match(Ptr<Packet> packet)
 {
@@ -70,6 +72,10 @@ TrafficClass::match(Ptr<Packet> packet)
     return false;
 }
 
+/**
+ * Check if queue is empty
+ * @return bool
+*/
 bool
 TrafficClass::IsEmpty()
 {
@@ -77,7 +83,9 @@ TrafficClass::IsEmpty()
 }
 
 /***
- * To Enqueue the packet
+ * Enqueues the packet in queue
+ * @param packet
+ * @return bool
  * */
 bool
 TrafficClass::Enqueue(Ptr<Packet> packet)
@@ -89,7 +97,8 @@ TrafficClass::Enqueue(Ptr<Packet> packet)
 }
 
 /***
- * To Dequeue the packet
+ * Dequeues the packet from queue
+ * @return Packet
  * */
 Ptr<ns3::Packet>
 TrafficClass::Dequeue()
@@ -112,7 +121,8 @@ TrafficClass::Dequeue()
 }
 
 /***
- * To Remove the packet
+ * Removes the packet from queue
+ * @return Packet
  * */
 Ptr<ns3::Packet>
 TrafficClass::Remove()
@@ -125,7 +135,8 @@ TrafficClass::Remove()
 }
 
 /***
- * To Peek the packet
+ * Peek the packet in front of queue
+ * @return Packet
  * */
 Ptr<ns3::Packet>
 TrafficClass::Peek()
@@ -146,48 +157,80 @@ TrafficClass::Peek()
     return p;
 }
 
+/**
+ * Set quantum size for queue
+ * @param uint32_t quantum_size
+*/
 void
 TrafficClass::SetQuantumSize(uint32_t q)
 {
     quantum_size = q;
 }
 
+/**
+ * Get quantum size
+ * @return uint32_t
+*/
 uint32_t
 TrafficClass::GetQuantumSize()
 {
     return quantum_size;
 }
 
+/**
+ * Sets deficit counter for queue
+ * @param uint32_t deficit_counter
+*/
 void
 TrafficClass::SetDeficitCounter(uint32_t d)
 {
     deficit_counter = d;
 }
 
+/**
+ * Gets deficit counter for queue
+ * @return uint32_t
+*/
 uint32_t
 TrafficClass::GetDeficitCounter()
 {
     return deficit_counter;
 }
 
+/**
+ * Get max packets for queue
+ * @return uint32_t
+*/
 uint32_t
 TrafficClass::GetMaxPacket()
 {
     return max_packets;
 }
 
+/**
+ * Get packet count in queue
+ * @return uint32_t
+*/
 uint32_t
 TrafficClass::GetPacketCount()
 {
     return m_queue.size();
 }
 
+/**
+ * Get priority level for queue
+ * @return uint32_t
+*/
 uint32_t
 TrafficClass::GetPriorityLevel()
 {
     return priority_level;
 }
 
+/**
+ * Get default flag for queue
+ * @return bool
+*/
 bool
 TrafficClass::GetDefault()
 {

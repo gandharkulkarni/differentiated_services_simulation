@@ -32,6 +32,11 @@ namespace ns3{
         NS_LOG_FUNCTION (this);
     }
 
+    /**
+     * Compares source port number of packet with filter element
+     * @param Packet
+     * @return bool
+    */
     bool 
     SourcePortNumber::match (Ptr<Packet> p)
     {

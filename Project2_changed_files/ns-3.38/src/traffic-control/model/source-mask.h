@@ -8,7 +8,10 @@
 
 namespace ns3 {
 
-
+/**
+ * Class to compare Source Mask of packet
+ * @author Gandhar Kulkarni
+*/
 class SourceMask: public FilterElement {
 public:
 

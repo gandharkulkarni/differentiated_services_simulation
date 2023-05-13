@@ -13,8 +13,7 @@ NS_OBJECT_ENSURE_REGISTERED(SourceMask);
 TypeId
 SourceMask::GetTypeId(void)
 {
-    static TypeId tid =
-        TypeId("ns3::SourceMask").SetParent<FilterElement>().SetGroupName("QoS");
+    static TypeId tid = TypeId("ns3::SourceMask").SetParent<FilterElement>().SetGroupName("QoS");
     return tid;
 }
 
@@ -35,6 +34,11 @@ SourceMask::SourceMask(Ipv4Address source_ip_address, Ipv4Mask ipv4Mask)
     this->value = ipv4Mask;
 }
 
+/**
+ * Compares source mask of packet again filter elements
+ * @param Packet
+ * @return bool
+ */
 bool
 SourceMask::match(Ptr<Packet> packet)
 {

@@ -2,7 +2,7 @@
     "q1":{
         "max_packets":"3000",
         "max_bytes":"0",
-        "quantum_size":"2060",
+        "quantum_size":"3090",
         "is_default":"0",
         "filters":{
             "source_port":"49153",
@@ -12,7 +12,7 @@
     "q2":{
         "max_packets":"2000",
         "max_bytes":"0",
-        "quantum_size":"1030",
+        "quantum_size":"2030",
         "is_default":"0",
         "filters":{
             "source_port":"49154",
@@ -22,7 +22,7 @@
     "q3":{
         "max_packets":"1000",
         "max_bytes":"0",
-        "quantum_size":"515",
+        "quantum_size":"1030",
         "is_default":"1",
         "filters":{
         }

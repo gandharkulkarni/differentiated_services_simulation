@@ -36,6 +36,11 @@ DestinationMask::DestinationMask(Ipv4Address destination_ip_address, Ipv4Mask ip
     this->value = ipv4Mask;
 }
 
+
+/**
+ * Compares destination mask of packet with filter element
+ * @return bool
+*/
 bool
 DestinationMask::match(Ptr<Packet> packet)
 {

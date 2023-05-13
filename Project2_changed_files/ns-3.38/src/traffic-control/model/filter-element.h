@@ -9,7 +9,10 @@
 #include "ns3/packet.h"
 
 namespace ns3 {
-
+/**
+ * A base class for a primitive condition to match
+ * @author Gandhar Kulkarni
+*/
 class FilterElement: public Object {
 public:
 

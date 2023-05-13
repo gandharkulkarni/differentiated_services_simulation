@@ -7,6 +7,10 @@
 
 namespace ns3 {
 
+/**
+ * Class to store filters
+ * @author Gandhar Kulkarni
+*/
 class Filter: public Object {
   public:
 

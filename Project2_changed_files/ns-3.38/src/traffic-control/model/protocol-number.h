@@ -9,7 +9,10 @@
 #include "ns3/point-to-point-net-device.h"
 
 namespace ns3 {
-
+/**
+ * Class to match protocol number of packet
+ * @author Gandhar Kulkarni
+*/
 class ProtocolNumber: public FilterElement {
   
 public:

@@ -1,51 +1,55 @@
 #include "destination-port-number.h"
-#include "ns3/packet.h"
-#include "ns3/log.h"
-#include "ns3/ipv4-header.h"
+
 #include "ns3/ipv4-address.h"
+#include "ns3/ipv4-header.h"
+#include "ns3/log.h"
+#include "ns3/packet.h"
 #include "ns3/udp-header.h"
- 
-namespace ns3{
 
-    NS_LOG_COMPONENT_DEFINE ("DestinationPortNumber");
-    NS_OBJECT_ENSURE_REGISTERED (DestinationPortNumber);
+namespace ns3
+{
 
-    TypeId
-    DestinationPortNumber::GetTypeId (void)
-    {
-        static TypeId tid = TypeId ("ns3::DestinationPortNumber")
-                .SetParent<FilterElement> ()
-                .SetGroupName ("QoS")
-        ;
-        return tid;
-    }
+NS_LOG_COMPONENT_DEFINE("DestinationPortNumber");
+NS_OBJECT_ENSURE_REGISTERED(DestinationPortNumber);
 
-    DestinationPortNumber::DestinationPortNumber (uint32_t val)
-    {
-        value = val;
-    }
-
-
-    DestinationPortNumber::~DestinationPortNumber ()
-    {
-        NS_LOG_FUNCTION (this);
-    }
-
-    bool 
-    DestinationPortNumber::match (Ptr<Packet> p)
-    {
-        NS_LOG_FUNCTION (this);
-	    Ptr<Packet> copyPacket = p -> Copy();
-	    Ipv4Header ipv4Header;
-	    UdpHeader udpHeader;
-
-        PppHeader pppHeader;
-        copyPacket -> RemoveHeader(pppHeader);
-	    copyPacket -> RemoveHeader(ipv4Header);
-	    copyPacket -> RemoveHeader(udpHeader);
-	    uint32_t destinationPort = (uint32_t)udpHeader.GetDestinationPort();
-
-	    return destinationPort == value;
-    }
-
+TypeId
+DestinationPortNumber::GetTypeId(void)
+{
+    static TypeId tid =
+        TypeId("ns3::DestinationPortNumber").SetParent<FilterElement>().SetGroupName("QoS");
+    return tid;
 }
+
+DestinationPortNumber::DestinationPortNumber(uint32_t val)
+{
+    value = val;
+}
+
+DestinationPortNumber::~DestinationPortNumber()
+{
+    NS_LOG_FUNCTION(this);
+}
+
+/**
+ * Compares destination port of packet against filter element
+ * @param Packet
+ * @return bool
+ */
+bool
+DestinationPortNumber::match(Ptr<Packet> p)
+{
+    NS_LOG_FUNCTION(this);
+    Ptr<Packet> copyPacket = p->Copy();
+    Ipv4Header ipv4Header;
+    UdpHeader udpHeader;
+
+    PppHeader pppHeader;
+    copyPacket->RemoveHeader(pppHeader);
+    copyPacket->RemoveHeader(ipv4Header);
+    copyPacket->RemoveHeader(udpHeader);
+    uint32_t destinationPort = (uint32_t)udpHeader.GetDestinationPort();
+
+    return destinationPort == value;
+}
+
+} // namespace ns3

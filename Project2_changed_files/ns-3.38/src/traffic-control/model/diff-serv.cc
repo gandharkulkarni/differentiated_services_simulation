@@ -36,6 +36,10 @@ DiffServ<Packet>::~DiffServ ()
   NS_LOG_FUNCTION (this);
 }
 
+/**
+ * Sets mode of Queue
+ * @param mode
+*/
 template <typename Packet>
 void
 DiffServ<Packet>::SetMode (QueueMode mode)
@@ -44,6 +48,10 @@ DiffServ<Packet>::SetMode (QueueMode mode)
   this->m_mode = mode;
 }
 
+/**
+ * Get mode of Queue
+ * @return QueueMode
+*/
 template <typename Packet>
 QueueMode
 DiffServ<Packet>::GetMode ()
@@ -52,6 +60,10 @@ DiffServ<Packet>::GetMode ()
   return m_mode;
 }
 
+/**
+ * Enqueues packet into queue
+ * @param Packet 
+*/
 template <typename Packet>
 bool
 DiffServ<Packet>::DoEnqueue (Ptr<ns3::Packet> p)
@@ -75,7 +87,8 @@ DiffServ<Packet>::DoEnqueue (Ptr<ns3::Packet> p)
 
 
 /**
- * To Dequeue the packet 
+ * Dequeues the packet 
+ * @return Packet
  **/
 template <typename Packet>
 Ptr<ns3::Packet>
@@ -94,7 +107,8 @@ DiffServ<Packet>::DoDequeue (void)
 
 
 /**
- * To peek the packet 
+ * Peeks the packet in front of the queue
+ * @return Packet
  **/
 template <typename Packet>
 Ptr<const ns3::Packet>
@@ -113,7 +127,8 @@ DiffServ<Packet>::DoPeek () const
 }
 
 /**
- * To Remove the packet from queue.
+ * Removes the packet from the queue.
+ * @return Packet
  **/
 template <typename Packet>
 Ptr<ns3::Packet>
@@ -132,8 +147,8 @@ DiffServ<Packet>::DoRemove (void)
 }
 
 /**
- * The classify function utilizes filter aspect to sort the traffic packets into appropriate
- * traffic queues.
+ * Classifies packet into different queues.
+ * @param Packet
  **/
 template <typename Packet>
 uint32_t
@@ -148,7 +163,7 @@ DiffServ<Packet>::Classify (Ptr<ns3::Packet> p)
 
 /**
  * To schedule the packet and return it.
- *  
+ * @return Packet
  **/
 template <typename Packet>
 Ptr<ns3::Packet>
@@ -161,7 +176,9 @@ DiffServ<Packet>::Schedule ()
 
 
 /***
- * To Enqueue the packet
+ * Enqueues the packet
+ * @param Packet
+ * @return bool
  * */
 template <typename Packet>
 bool
@@ -173,7 +190,9 @@ DiffServ<Packet>::Enqueue (Ptr<Packet> item)
 }
 
 /***
- * To Dequeue the packet
+ * Dequeues the packet
+ * @param Packet
+ * @return Packet
  * */
 template <typename Packet>
 Ptr<Packet>
@@ -189,7 +208,8 @@ DiffServ<Packet>::Dequeue (void)
 }
 
 /***
- * To Remove the packet
+ * Removes the packet
+ * @return Packet
  * */
 template <typename Packet>
 Ptr<Packet>
@@ -206,7 +226,8 @@ DiffServ<Packet>::Remove (void)
 
 
 /***
- * To Peek the packet
+ * Peeks the packet in front of Queue
+ * @return Packet
  * */
 template <typename Packet>
 Ptr<const Packet>

@@ -49,6 +49,10 @@ DRR<Packet>::GetServiceQueue()
     return &service_queue;
 }
 
+/**
+ * Enqueues packet into Queue
+ * @return bool
+ */
 template <typename Packet>
 bool
 DRR<Packet>::Enqueue(Ptr<Packet> packet)
@@ -57,17 +61,26 @@ DRR<Packet>::Enqueue(Ptr<Packet> packet)
     return DoEnqueue(packet);
 }
 
+/**
+ * Dequeues packet from queue
+ * @return Packet
+ */
 template <typename Packet>
 Ptr<Packet>
 DRR<Packet>::Dequeue()
 {
     NS_LOG_FUNCTION(this);
     Ptr<Packet> packet = DoDequeue();
+
     NS_LOG_LOGIC("Popped " << packet);
 
     return packet;
 }
 
+/**
+ * Removes packet from queue
+ * @return Packet
+ */
 template <typename Packet>
 Ptr<Packet>
 DRR<Packet>::Remove()
@@ -80,6 +93,10 @@ DRR<Packet>::Remove()
     return packet;
 }
 
+/**
+ * Peeks packet from front of the queue
+ * @return Packet
+ */
 template <typename Packet>
 Ptr<const Packet>
 DRR<Packet>::Peek() const
@@ -88,6 +105,10 @@ DRR<Packet>::Peek() const
     return DoPeek();
 }
 
+/**
+ * Enqueues packet into queue
+ * @return Packet
+ */
 template <typename Packet>
 bool
 DRR<Packet>::DoEnqueue(Ptr<Packet> packet)
@@ -110,6 +131,10 @@ DRR<Packet>::DoEnqueue(Ptr<Packet> packet)
     return false;
 }
 
+/**
+ * Dequeus packet from queue
+ * @return Packet
+ */
 template <typename Packet>
 Ptr<Packet>
 DRR<Packet>::DoDequeue()
@@ -124,6 +149,10 @@ DRR<Packet>::DoDequeue()
     return nullptr;
 }
 
+/**
+ * Removes packet from queue
+ * @return Packet
+ */
 template <typename Packet>
 Ptr<Packet>
 DRR<Packet>::DoRemove()
@@ -138,6 +167,10 @@ DRR<Packet>::DoRemove()
     return nullptr;
 }
 
+/**
+ * Peeks packet from front of the queue
+ * @return Packet
+ */
 template <typename Packet>
 Ptr<const Packet>
 DRR<Packet>::DoPeek() const
@@ -145,6 +178,11 @@ DRR<Packet>::DoPeek() const
     return q_class[active_queue_index]->Peek();
 }
 
+/**
+ * Classifies packet into different queues based on filters
+ * @param Packet
+ * @return uint32_t
+ */
 template <typename Packet>
 uint32_t
 DRR<Packet>::Classify(Ptr<Packet> p)
@@ -168,6 +206,10 @@ DRR<Packet>::Classify(Ptr<Packet> p)
     return index;
 }
 
+/**
+ * Decides which packets to service
+ * @return Queue<Packet>
+ */
 template <typename Packet>
 std::queue<Ptr<Packet>>*
 DRR<Packet>::Schedule()
@@ -182,14 +224,15 @@ DRR<Packet>::Schedule()
                 // Update dificit counter by adding quantum
                 q_class[i]->SetDeficitCounter(q_class[i]->GetDeficitCounter() +
                                               q_class[i]->GetQuantumSize());
-                
+
                 while (q_class[i]->GetPacketCount() != 0)
                 {
                     Ptr<Packet> packet = q_class[i]->Peek();
                     uint32_t sizeOfPacket = packet->GetSize();
                     if (q_class[i]->GetDeficitCounter() >= sizeOfPacket)
                     {
-                        q_class[i]->SetDeficitCounter(q_class[i]->GetDeficitCounter() - sizeOfPacket);
+                        q_class[i]->SetDeficitCounter(q_class[i]->GetDeficitCounter() -
+                                                      sizeOfPacket);
                         active_queue_index = i;
                         q_class[i]->Dequeue();
                         GetServiceQueue()->push(packet);
@@ -209,4 +252,5 @@ DRR<Packet>::Schedule()
     }
     return GetServiceQueue();
 }
+
 } // namespace ns3

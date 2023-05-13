@@ -19,8 +19,8 @@ namespace ns3 {
     }
 
     /**
-     * To match the packet according to filters.
-     * 
+     * Match the packet attributes against all filters for queue.
+     * @return bool
      * */    
     bool Filter::match (Ptr<ns3::Packet> packet){
       auto iter = elements.begin();     

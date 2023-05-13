@@ -12,15 +12,19 @@
 
 namespace ns3
 {
-
+/**
+ * Queue mode packets
+*/
 enum QueueMode
 {
     QUEUE_MODE_PACKETS,
     QUEUE_MODE_BYTES,
 };
 
-class TraceContainer;
-
+/**
+ * A Base Class to Simulate Differentiated Services
+ * @author Gandhar Kulkarni
+*/
 template <typename Packet>
 class DiffServ : public Queue<ns3::Packet>
 {

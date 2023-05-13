@@ -24,7 +24,11 @@ using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE("Quality of Service");
 
-// Cjson Code start
+/**
+ * Reads JSON config file
+ * @param String path
+ * @return cJSON*
+*/
 cJSON*
 read_config(std::string path)
 {
@@ -41,6 +45,11 @@ read_config(std::string path)
     return json;
 }
 
+/**
+ * Method to create filter objects based on filters defined in config json
+ * @param cJSON* filters
+ * @return Filter
+*/
 static Filter*
 createFilter(const cJSON* filters)
 {
@@ -86,28 +95,30 @@ createFilter(const cJSON* filters)
     return filterWithElement;
 }
 
+/**
+ * Populates traffic class vector
+ * @param cJSON*
+ * @param string
+ * @param vector<TrafficClass*>
+*/
 void
-populate_config_struct(cJSON* json, std::string config_file, std::vector<TrafficClass*>& result)
+populate_traffic_class_vector(cJSON* json, std::string config_file, std::vector<TrafficClass*>& result)
 {
     const cJSON* q1 = NULL;
     const cJSON* q2 = NULL;
     const cJSON* q3 = NULL;
     const cJSON* maxPackets = NULL;
     const cJSON* maxBytes = NULL;
-    // const cJSON* weight = NULL;
     const cJSON* priorityLevel = NULL;
     const cJSON* quantumSize = NULL;
-    // const cJSON* deficitCounter = NULL;
     const cJSON* isDefault = NULL;
     const cJSON* filters = NULL;
 
     q1 = cJSON_GetObjectItemCaseSensitive(json, "q1");
     maxPackets = cJSON_GetObjectItem(q1, "max_packets");
     maxBytes = cJSON_GetObjectItem(q1, "max_bytes");
-    // weight = cJSON_GetObjectItem(q1, "weight");
     priorityLevel = cJSON_GetObjectItem(q1, "priority_level");
     quantumSize = cJSON_GetObjectItem(q1, "quantum_size");
-    // deficitCounter = cJSON_GetObjectItem(q1, "deficit_counter");
     isDefault = cJSON_GetObjectItem(q1, "is_default");
     filters = cJSON_GetObjectItem(q1, "filters");
 
@@ -134,7 +145,6 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
 
         maxPackets = cJSON_GetObjectItem(q2, "max_packets");
         maxBytes = cJSON_GetObjectItem(q2, "max_bytes");
-        // weight = cJSON_GetObjectItem(q2, "weight");
         priorityLevel = cJSON_GetObjectItem(q2, "priority_level");
         isDefault = cJSON_GetObjectItem(q2, "is_default");
         filters = cJSON_GetObjectItem(q2, "filters");
@@ -157,7 +167,6 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         // TC object for first queue
         TrafficClass* tc1 = new TrafficClass(atoi(maxPackets->valuestring),
                                              atoi(quantumSize->valuestring),
-                                            //  atoi(deficitCounter->valuestring),
                                              atoi(isDefault->valuestring),
                                              filters_list);
         result.push_back(tc1);
@@ -167,7 +176,6 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         maxPackets = cJSON_GetObjectItem(q2, "max_packets");
         maxBytes = cJSON_GetObjectItem(q2, "max_bytes");
         quantumSize = cJSON_GetObjectItem(q2, "quantum_size");
-        // deficitCounter = cJSON_GetObjectItem(q2, "deficit_counter");
         isDefault = cJSON_GetObjectItem(q2, "is_default");
         filters = cJSON_GetObjectItem(q2, "filters");
         filter = createFilter(filters);
@@ -179,7 +187,6 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         // TC object for second queue
         TrafficClass* tc2 = new TrafficClass(atoi(maxPackets->valuestring),
                                              atoi(quantumSize->valuestring),
-                                            //  atoi(deficitCounter->valuestring),
                                              atoi(isDefault->valuestring),
                                              filters_list);
         result.push_back(tc2);
@@ -189,7 +196,6 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         maxPackets = cJSON_GetObjectItem(q3, "max_packets");
         maxBytes = cJSON_GetObjectItem(q3, "max_bytes");
         quantumSize = cJSON_GetObjectItem(q3, "quantum_size");
-        // deficitCounter = cJSON_GetObjectItem(q3, "deficit_counter");
         isDefault = cJSON_GetObjectItem(q3, "is_default");
         filters = cJSON_GetObjectItem(q3, "filters");
         filter = createFilter(filters);
@@ -202,25 +208,21 @@ populate_config_struct(cJSON* json, std::string config_file, std::vector<Traffic
         // TC object for third queue
         TrafficClass* tc3 = new TrafficClass(atoi(maxPackets->valuestring),
                                              atoi(quantumSize->valuestring),
-                                            //  atoi(deficitCounter->valuestring),
                                              atoi(isDefault->valuestring),
                                              filters_list);
         result.push_back(tc3);
     }
 }
 
-// cjson code end
 
 int
 main(int argc, char* argv[])
 {
-    // std::string fileName = "";
     std::string config_file = "";
     CommandLine cmd;
     cmd.AddValue("filename", "Name of the configuration file", config_file);
     cmd.Parse(argc, argv);
 
-    // Cjson code start
     if (!(config_file == "DRR" || config_file == "SPQ"))
     {
         std::cout << "You must specify the configuration file (SPQ/DRR)" << std::endl;
@@ -237,14 +239,13 @@ main(int argc, char* argv[])
         // Read respective json file configuration
         cJSON* json = read_config(config_path);
         // initialize struct variables
-        populate_config_struct(json, config_file, traffics);
+        populate_traffic_class_vector(json, config_file, traffics);
     }
     else
     {
         std::cout << "No config file detected" << std::endl;
         return 0;
     }
-    // Cjson code end
 
     if (config_file == "SPQ")
     {
@@ -261,12 +262,12 @@ main(int argc, char* argv[])
 
         NetDeviceContainer node12 = p2p.Install(nodes.Get(1), nodes.Get(2));
 
-        Ptr<PointToPointNetDevice> router_send = DynamicCast<PointToPointNetDevice>(node12.Get(0));
+        Ptr<PointToPointNetDevice> router = DynamicCast<PointToPointNetDevice>(node12.Get(0));
 
         std::cout<<"SPQ simulation started"<<std::endl;
 
-        Ptr<SPQ<Packet>> queue2 = new SPQ<Packet>(QueueMode::QUEUE_MODE_PACKETS, traffics);
-        router_send->SetQueue(queue2);
+        Ptr<SPQ<Packet>> queue = new SPQ<Packet>(QueueMode::QUEUE_MODE_PACKETS, traffics);
+        router->SetQueue(queue);
 
         InternetStackHelper stack;
         stack.Install(nodes);
@@ -284,13 +285,8 @@ main(int argc, char* argv[])
         serverApps.Start(Seconds(1.0));
         serverApps.Stop(Seconds(10000.0));
 
-        // UdpServerHelper echoServer2(10);
-        // ApplicationContainer serverApps2 = echoServer2.Install(nodes.Get(2));
-        // serverApps2.Start(Seconds(1.0));
-        // serverApps2.Stop(Seconds(10000.0));
-
         // 1st sender wıll have source port 49153
-        // 2nd sender wıll have source port 49154
+        // 2nd sender wıll have source port 49154 and so on
         // 49153
         UdpClientHelper echoClient(interfaces2.GetAddress(1), 9);
         echoClient.SetAttribute("MaxPackets", UintegerValue(50000));
@@ -333,12 +329,12 @@ main(int argc, char* argv[])
 
         NetDeviceContainer node12 = p2p.Install(nodes.Get(1), nodes.Get(2));
 
-        Ptr<PointToPointNetDevice> router_send = DynamicCast<PointToPointNetDevice>(node12.Get(0));
+        Ptr<PointToPointNetDevice> router = DynamicCast<PointToPointNetDevice>(node12.Get(0));
 
         std::cout<<"DRR simulation started"<<std::endl;
 
-        Ptr<DRR<Packet>> queue3 = new DRR<Packet>(QueueMode::QUEUE_MODE_PACKETS, traffics);
-        router_send->SetQueue(queue3);
+        Ptr<DRR<Packet>> queue = new DRR<Packet>(QueueMode::QUEUE_MODE_PACKETS, traffics);
+        router->SetQueue(queue);
 
         InternetStackHelper stack;
         stack.Install(nodes);
@@ -356,13 +352,8 @@ main(int argc, char* argv[])
         serverApps.Start(Seconds(1.0));
         serverApps.Stop(Seconds(10000.0));
 
-        // UdpServerHelper echoServer2(10);
-        // ApplicationContainer serverApps2 = echoServer2.Install(nodes.Get(2));
-        // serverApps2.Start(Seconds(1.0));
-        // serverApps2.Stop(Seconds(10000.0));
-
         // 1st sender wıll have source port 49153
-        // 2nd sender wıll have source port 49154
+        // 2nd sender wıll have source port 49154 and so on
         // 49153
         UdpClientHelper echoClient(interfaces2.GetAddress(1), 9);
         echoClient.SetAttribute("MaxPackets", UintegerValue(3000));

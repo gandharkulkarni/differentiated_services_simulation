@@ -7,7 +7,10 @@
 
 namespace ns3
 {
-
+/**
+ * Class to simulate Deficit Round Robin differentiated service
+ * @author Gandhar Kulkarni
+*/
 template <typename Packet>
 class DRR : public DiffServ<Packet>
 {

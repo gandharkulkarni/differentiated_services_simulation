@@ -9,7 +9,10 @@
 
 namespace ns3 {
 
-
+/**
+ * Class to match Destination IP address of packet
+ * @author Gandhar Kulkarni
+*/
 class DestinationIpAddress: public FilterElement {
 public:
 

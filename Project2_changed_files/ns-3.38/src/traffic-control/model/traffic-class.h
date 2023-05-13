@@ -12,7 +12,10 @@
 
 namespace ns3
 {
-
+/**
+ * Defines the characteristics of a queue
+ * @author Gandhar Kulkarni
+*/
 class TrafficClass : public Object
 {
   public:
